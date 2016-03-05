@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.CardView
+        android:elevation="5dp"
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <fragment
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.MapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"/>
+
+            <TextView
+                android:textSize="@dimen/hwtoreach_text_size"
+                android:textColor="#3B94D0"
+                android:layout_margin="10dp"
+                android:text="How To Reach ?"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:textSize="@dimen/hwtoreach_text_size"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="5dp"
+                android:text="Nedumbaserry Airport            --               50Kms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:textSize="@dimen/hwtoreach_text_size"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="5dp"
+                android:text="Calicut Airport                          --             115Kms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:textSize="@dimen/hwtoreach_text_size"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="30dp"
+                android:text="Coimbatore Airport                  --             115Kms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <TextView
+                android:textSize="@dimen/hwtoreach_text_size"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="5dp"
+                android:text="kochi                                          --               80Kms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:textSize="@dimen/hwtoreach_text_size"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="5dp"
+                android:text="Guruvayoor                                --               20Kms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:textSize="@dimen/hwtoreach_text_size"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="5dp"
+                android:text="Thrissur Town                           --                  5Kms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:textSize="@dimen/hwtoreach_text_size"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="5dp"
+                android:text="Thrissur Railway Station          --                 5Kms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <ImageView
+                android:background="@drawable/arrowright"
+                android:layout_width="match_parent"
+                android:layout_height="100dp" />
+
+            <TextView
+                android:textSize="@dimen/hwtoreach_text_size"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="info"
+                android:background="@color/light_yellow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:textSize="@dimen/hwtoreach_text_size"
+                android:drawablePadding="10dp"
+                android:drawableLeft="@drawable/ic_home"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="5dp"
+            android:text="Puzhakal Post,Guruvayoor Road Thrissur , Kerala"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+            <TextView
+                android:textSize="@dimen/hwtoreach_text_size"
+                android:drawablePadding="10dp"
+                android:drawableLeft="@drawable/ic_clock"
+                android:layout_marginRight="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="5dp"
+                android:text="Open 10.00 AM   -  9.00 PM "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <TextView
+                android:textSize="@dimen/hwtoreach_text_size"
+                android:drawablePadding="10dp"
+                android:drawableLeft="@drawable/ic_mobile"
+                android:layout_marginRight="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="5dp"
+                android:text="0487 - 2379000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:textSize="@dimen/hwtoreach_text_size"
+                android:drawablePadding="10dp"
+                android:drawableLeft="@drawable/ic_email"
+                android:layout_marginRight="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="5dp"
+                android:text="info@sobhacitymall.com"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:textSize="@dimen/hwtoreach_text_size"
+                android:drawablePadding="10dp"
+                android:drawableLeft="@drawable/ic_web"
+                android:layout_marginRight="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="30dp"
+                android:text="www.sobhacitymall.com"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+
+        </LinearLayout>
+
+        </ScrollView>
+
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

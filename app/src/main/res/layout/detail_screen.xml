@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:background="@color/banner_bg"
+        android:id="@+id/rl_detail_desc"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <TextView
+            android:id="@+id/tv_detail_name"
+            android:textColor="@color/black"
+            android:layout_centerInParent="true"
+            android:text="KFC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <com.daimajia.slider.library.SliderLayout
+        android:id="@+id/detail_head_slider"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        />
+<LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_detail_logo"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="100dp" />
+
+    <TextView
+        android:text="nfakfnakfna ananfalkfn aalflf adfjljfa afkankfnak adajlflfj alfaljf
+        aafmalf aflafal
+        aflafj"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <TextView
+            android:layout_weight="1"
+            android:textSize="@dimen/hwtoreach_text_size"
+            android:drawablePadding="10dp"
+            android:drawableLeft="@drawable/ic_clock"
+            android:layout_marginLeft="15dp"
+            android:text="Open 10.00 AM   -  9.00 PM "
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_weight="1"
+            android:textSize="@dimen/hwtoreach_text_size"
+            android:drawablePadding="10dp"
+            android:drawableLeft="@drawable/ic_mobile"
+            android:layout_marginLeft="15dp"
+            android:text="0487 - 2379000"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <TextView
+            android:layout_weight="1"
+            android:textSize="@dimen/hwtoreach_text_size"
+            android:drawablePadding="10dp"
+            android:drawableLeft="@drawable/ic_email"
+            android:layout_marginLeft="15dp"
+            android:text="info@sobhacitymall.com"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_weight="1"
+            android:textSize="@dimen/hwtoreach_text_size"
+            android:drawablePadding="10dp"
+            android:drawableLeft="@drawable/ic_web"
+            android:layout_marginLeft="15dp"
+            android:text="www.sobhacitymall.com"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_menucard_id"
+        android:background="@color/light_green"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <TextView
+            android:textColor="#FFFFFF"
+            android:text="Menu Card"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <com.daimajia.slider.library.SliderLayout
+        android:layout_marginTop="10dp"
+        android:id="@+id/detail_promotion_slider"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        />
+
+</LinearLayout>

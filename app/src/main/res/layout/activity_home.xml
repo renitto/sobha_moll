@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.renitto.scmapp.Presenter.ActivityHome">
+
+
+
+
+    <LinearLayout
+        android:id="@+id/ll_header_colours"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="15dp">
+
+       <View
+           android:background="@color/shopping_color"
+           android:layout_weight="1"
+           android:layout_width="0dp"
+           android:layout_height="match_parent" />
+        <View
+            android:background="@color/dining_color"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+        <View
+            android:background="@color/entertainment_color"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+        <View
+            android:background="@color/deals_color"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+        <View
+            android:background="@color/more_color"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_spinners"
+        android:layout_below="@+id/ll_header_colours"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <Spinner
+            android:background="@color/black"
+            android:id="@+id/sp_menu_shopping"
+            style="@style/SpinnerAsEditText"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:spinnerMode="dropdown" />
+
+        <RelativeLayout
+            android:id="@+id/rl_menu_dining"
+            android:background="@color/black"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:textSize="15sp"
+                android:textColor="@color/white"
+                android:layout_centerInParent="true"
+                android:text="Dining"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_menu_entertainment"
+            android:background="@color/black"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:textSize="15sp"
+                android:textColor="@color/white"
+                android:layout_centerInParent="true"
+                android:text="Entertainment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_menu_deals"
+            android:background="@color/black"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:textSize="15sp"
+                android:textColor="@color/white"
+                android:layout_centerInParent="true"
+                android:text="Deals"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+
+        <Spinner
+            android:background="@color/black"
+            android:id="@+id/sp_menu_more"
+            style="@style/SpinnerAsEditText"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:spinnerMode="dropdown" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_below="@+id/ll_spinners"
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
+</RelativeLayout>

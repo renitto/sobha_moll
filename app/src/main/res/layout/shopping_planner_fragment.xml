@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#3B94D0">
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/tv_shopping_planner_header"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
+        android:text="choose items from here
+simply swipe to remove the item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv_shopping_planner_ad_text"
+        android:layout_marginBottom="10dp"
+        app:cardBackgroundColor="#C5DFF1"
+        android:elevation="5dp"
+        android:layout_margin="20dp"
+        app:cardCornerRadius="15dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/tv_shopping_planner_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:elevation="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <EditText
+            android:textColorHint="@color/more_color"
+            android:textColor="@color/white"
+            android:background="@android:color/transparent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/et_shopping_planner_item_name"
+            android:hint="       Type the item here        "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+
+            android:layout_marginRight="15dp"
+            android:background="@drawable/rightarrowblue"
+            android:id="@+id/bt_shopping_planner_add"
+            android:layout_alignParentRight="true"
+            android:layout_width="25dp"
+            android:layout_height="40dp" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/cv_shopping_planner_ad_text"
+        android:id="@+id/recycler_shopping_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        />
+
+    <Button
+
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/white"
+        android:text="Clear All"
+        android:background="@drawable/green_button_bg"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/bt_shopping_clear_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+
+</RelativeLayout>
