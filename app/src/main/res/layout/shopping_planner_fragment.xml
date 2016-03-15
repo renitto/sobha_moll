@@ -4,15 +4,17 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#3B94D0">
+    android:background="@drawable/palnner_bg">
 
     <TextView
-        android:layout_marginTop="10dp"
+        android:layout_marginLeft="@dimen/shp_plnr_header_text_margin"
+        android:layout_marginRight="@dimen/shp_plnr_header_text_margin"
+        android:textSize="@dimen/shp_plnr_header_text_size"
+        android:layout_marginTop="@dimen/shp_plnr_header_text_margintop"
         android:id="@+id/tv_shopping_planner_header"
         android:textColor="@color/white"
         android:layout_centerHorizontal="true"
-        android:text="choose items from here
-simply swipe to remove the item"
+        android:text="choose items from here,simply swipe to remove the item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -21,7 +23,9 @@ simply swipe to remove the item"
         android:layout_marginBottom="10dp"
         app:cardBackgroundColor="#C5DFF1"
         android:elevation="5dp"
-        android:layout_margin="20dp"
+        android:layout_marginTop="@dimen/shp_plnr_header_addcard_margin_top"
+        android:layout_marginLeft="@dimen/shp_plnr_header_addcard_margin"
+        android:layout_marginRight="@dimen/shp_plnr_header_addcard_margin"
         app:cardCornerRadius="15dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/tv_shopping_planner_header"
@@ -33,6 +37,7 @@ simply swipe to remove the item"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         <EditText
+            android:textSize="@dimen/shp_plnr_header_text_size"
             android:textColorHint="@color/more_color"
             android:textColor="@color/white"
             android:background="@android:color/transparent"
@@ -51,7 +56,7 @@ simply swipe to remove the item"
             android:id="@+id/bt_shopping_planner_add"
             android:layout_alignParentRight="true"
             android:layout_width="25dp"
-            android:layout_height="40dp" />
+            android:layout_height="50dp" />
 
         </RelativeLayout>
 
@@ -63,10 +68,12 @@ simply swipe to remove the item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
         />
 
     <Button
-
+        android:padding="10dp"
+        android:textSize="@dimen/shp_plnr_header_text_size"
         android:layout_marginBottom="20dp"
         android:layout_alignParentBottom="true"
         android:textColor="@color/white"

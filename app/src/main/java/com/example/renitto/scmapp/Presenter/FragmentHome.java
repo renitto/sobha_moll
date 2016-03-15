@@ -260,27 +260,42 @@ public class FragmentHome extends Fragment implements BaseSliderView.OnSliderCli
 
                     if (category_name[position].equals("SHOPPING"))
                     {
+                        Bundle bundle_shopping=new Bundle();
+                        bundle_shopping.putString("fromhome", "Fashion");
 
-                        getActivity().findViewById(R.id.sp_menu_shopping).setBackgroundColor(getResources().getColor(R.color.shopping_color)); // setting base colour
+                        getActivity().findViewById(R.id.ll_menu_shopping).setVisibility(View.GONE);
+                        getActivity().findViewById(R.id.ll_menu_more).setVisibility(View.GONE);
+
+                        getActivity().findViewById(R.id.rl_menu_shopping).setBackgroundColor(getResources().getColor(R.color.shopping_color)); // changing other to black
                         getActivity().findViewById(R.id.rl_menu_dining).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
                         getActivity().findViewById(R.id.rl_menu_entertainment).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+                        getActivity().findViewById(R.id.rl_menu_deals).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+                        getActivity().findViewById(R.id.rl_menu_more).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
 
                         //calling shopping fragment
 
-                        FragmentShopping fragmentShopping = new FragmentShopping();
-                        getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentShopping).addToBackStack("Shopping").commit();
+                        Fragment_shopping fragment_shopping= new Fragment_shopping();
+                        //calling fashion fragment
+
+                        fragment_shopping.setArguments(bundle_shopping);
+
+                        ((ActivityHome)getActivity()).replaceFragment(fragment_shopping);
 
                     }
                     else  if (category_name[position].equals("DINING"))
                     {
-                        getActivity().findViewById(R.id.rl_menu_dining).setBackgroundColor(getResources().getColor(R.color.dining_color)); // setting base colour
-                        getActivity().findViewById(R.id.rl_menu_deals).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+                        getActivity().findViewById(R.id.ll_menu_shopping).setVisibility(View.GONE);
+                        getActivity().findViewById(R.id.ll_menu_more).setVisibility(View.GONE);
+
+                        getActivity().findViewById(R.id.rl_menu_shopping).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+                        getActivity().findViewById(R.id.rl_menu_dining).setBackgroundColor(getResources().getColor(R.color.dining_color)); // changing other to black
                         getActivity().findViewById(R.id.rl_menu_entertainment).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+                        getActivity().findViewById(R.id.rl_menu_deals).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+                        getActivity().findViewById(R.id.rl_menu_more).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
 
                         //calling dining fragment
 
-                        FragmentDining fragmentDining = new FragmentDining();
-                        getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentDining).addToBackStack("Dining").commit();
+                        ((ActivityHome)getActivity()).replaceFragment(new FragmentDining());
 
                     }
                     else  if (category_name[position].equals("ENTERTAINMENT"))
@@ -288,25 +303,33 @@ public class FragmentHome extends Fragment implements BaseSliderView.OnSliderCli
 
 
 
-                        getActivity().findViewById(R.id.rl_menu_entertainment).setBackgroundColor(getResources().getColor(R.color.entertainment_color)); // setting base colour
+                        getActivity().findViewById(R.id.ll_menu_shopping).setVisibility(View.GONE);
+                        getActivity().findViewById(R.id.ll_menu_more).setVisibility(View.GONE);
+
+                        getActivity().findViewById(R.id.rl_menu_shopping).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
                         getActivity().findViewById(R.id.rl_menu_dining).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+                        getActivity().findViewById(R.id.rl_menu_entertainment).setBackgroundColor(getResources().getColor(R.color.entertainment_color)); // changing other to black
                         getActivity().findViewById(R.id.rl_menu_deals).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+                        getActivity().findViewById(R.id.rl_menu_more).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
 
                         //calling entertainment fragment
 
-                        FragmentEntertainment fragmentEntertainment = new FragmentEntertainment();
-                        getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentEntertainment).addToBackStack("Entertainment").commit();
+                        ((ActivityHome)getActivity()).replaceFragment(new FragmentMollywood());
                     }
                     else  if (category_name[position].equals("DEALS"))
                     {
-                        getActivity().findViewById(R.id.rl_menu_deals).setBackgroundColor(getResources().getColor(R.color.deals_color)); // setting base colour
+                        getActivity().findViewById(R.id.ll_menu_shopping).setVisibility(View.GONE);
+                        getActivity().findViewById(R.id.ll_menu_more).setVisibility(View.GONE);
+
+                        getActivity().findViewById(R.id.rl_menu_shopping).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
                         getActivity().findViewById(R.id.rl_menu_dining).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
                         getActivity().findViewById(R.id.rl_menu_entertainment).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+                        getActivity().findViewById(R.id.rl_menu_deals).setBackgroundColor(getResources().getColor(R.color.deals_color)); // changing other to black
+                        getActivity().findViewById(R.id.rl_menu_more).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
 
                         //calling deals fragment
 
-                        FragmentDeals fragmentDeals = new FragmentDeals();
-                        getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentDeals).addToBackStack("Deals").commit();
+                        ((ActivityHome)getActivity()).replaceFragment(new FragmentDeals());
 
                     }
 

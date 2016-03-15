@@ -36,8 +36,7 @@ public class FragmentAboutMall extends Fragment {
             @Override
             public void onClick(View v) {
 
-                getActivity().findViewById(R.id.sp_menu_shopping).setBackgroundColor(getResources().getColor(R.color.black)); // setting base colour
-                getActivity().findViewById(R.id.sp_menu_more).setBackgroundColor(getResources().getColor(R.color.more_color)); // changing other to black
+
 
 
                 getActivity().findViewById(R.id.rl_menu_deals).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
@@ -46,8 +45,7 @@ public class FragmentAboutMall extends Fragment {
 
                 //calling  how to reach fragment
 
-                FragmentHowToReach  fragmentHowToReach= new FragmentHowToReach();
-                getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentHowToReach).addToBackStack("Aboutmall").commit();
+                ((ActivityHome)getActivity()).replaceFragment(new FragmentHowToReach());
             }
         });
 

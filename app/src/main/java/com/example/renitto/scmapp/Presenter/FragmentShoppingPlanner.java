@@ -12,10 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.renitto.scmapp.DAL.DbManager;
 import com.example.renitto.scmapp.Model.ModelShoppingPlanner;
 import com.example.renitto.scmapp.R;
 import com.squareup.picasso.Picasso;
@@ -33,6 +35,7 @@ public class FragmentShoppingPlanner extends Fragment {
     Button BT_shopping_planner_add,BT_clear_all_shopp_planner_item;
     EditText ET_shopping_planner_item_name;
     ModelShoppingPlanner shop_item;
+    DbManager dbManager ;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -43,12 +46,14 @@ public class FragmentShoppingPlanner extends Fragment {
                 container, false);
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        dbManager = new DbManager();
+
 
         RV_Shopping_Planner = (RecyclerView)view.findViewById(R.id.recycler_shopping_list);
         mLayoutManager = new LinearLayoutManager(getActivity());
         RV_Shopping_Planner.setLayoutManager(mLayoutManager);
 
-       final ShoppingPlannerItemAdapter shoppingPlannerItemAdapter = new ShoppingPlannerItemAdapter(mItems);
+       final ShoppingPlannerItemAdapter shoppingPlannerItemAdapter = new ShoppingPlannerItemAdapter(dbManager.getMyshoppingPlanner(getActivity()));
 
         RV_Shopping_Planner.setAdapter(shoppingPlannerItemAdapter);
 
@@ -56,6 +61,7 @@ public class FragmentShoppingPlanner extends Fragment {
         BT_clear_all_shopp_planner_item = (Button)view.findViewById(R.id.bt_shopping_clear_all);
 
         ET_shopping_planner_item_name =(EditText)view.findViewById(R.id.et_shopping_planner_item_name);
+
 
         BT_shopping_planner_add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +72,7 @@ public class FragmentShoppingPlanner extends Fragment {
                     shop_item = new ModelShoppingPlanner(ET_shopping_planner_item_name.getText().toString(),false);
                     shoppingPlannerItemAdapter.addItem(shop_item);
                     ET_shopping_planner_item_name.setText("");
+                    dbManager.insertToShoppingPlanner(getActivity(),shop_item);
                 }
 
             }
@@ -76,6 +83,7 @@ public class FragmentShoppingPlanner extends Fragment {
             public void onClick(View v) {
 
                 shoppingPlannerItemAdapter.ClearAllData();
+                dbManager.removeAllShoppingPlanner(getActivity());
             }
         });
 
@@ -122,11 +130,6 @@ public class FragmentShoppingPlanner extends Fragment {
                 CB_shopping_planner_item = (CheckBox) view.findViewById(R.id.cb_shopping_planner_item);
 
 
-
-
-
-
-
             }
 
 
@@ -159,6 +162,12 @@ public class FragmentShoppingPlanner extends Fragment {
 
 
 
+            holder.CB_shopping_planner_item.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    dbManager.updateShoppingPlanner(getActivity(),new ModelShoppingPlanner(mItems.get(position).getShop_item_name(),isChecked));
+                }
+            });
 
 
 
@@ -218,8 +227,11 @@ public class FragmentShoppingPlanner extends Fragment {
         }
 
         public void remove(int position) {
+
+            dbManager.removeShoppingPlanner(getActivity(),mItems.get(position));
             mItems.remove(position);
             notifyItemRemoved(position);
+
         }
 
 

@@ -3,6 +3,7 @@ package com.example.renitto.scmapp.Presenter;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
@@ -31,6 +33,7 @@ public class FragmentDining extends Fragment implements BaseSliderView.OnSliderC
     RecyclerView.LayoutManager mLayoutManager;
     SliderLayout mDiningSlider;
     ImageView IV_Dining_Banner;
+    TextView TV_dining_name;
 
 
     String[] brand_image_urls = {"https://pbs.twimg.com/profile_images/648460751863083010/yOGdridr.png",
@@ -60,6 +63,9 @@ public class FragmentDining extends Fragment implements BaseSliderView.OnSliderC
                 .into(IV_Dining_Banner);
 
 
+//        TV_dining_name = (TextView)view.findViewById(R.id.tv_dining_name);
+//        Typeface tf = Typeface.createFromAsset(getActivity().getAssets(),"fonts/Ailerons.otf");
+//        TV_dining_name.setTypeface(tf, Typeface.ITALIC);
 
         // home slider start
         mDiningSlider = (SliderLayout)view.findViewById(R.id.dining_slider);
@@ -277,8 +283,7 @@ public class FragmentDining extends Fragment implements BaseSliderView.OnSliderC
 
 
 
-                    FragmentDetail fragmentDetail= new FragmentDetail();
-                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentDetail).addToBackStack("Details").commit();
+                    ((ActivityHome)getActivity()).replaceFragment(new FragmentDetail());
 
                 }
             });

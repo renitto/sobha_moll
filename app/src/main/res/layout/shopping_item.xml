@@ -9,6 +9,6 @@
         android:id="@+id/iv_shopping_item"
         android:layout_weight="1"
         android:layout_width="0dp"
-        android:layout_height="150dp" />
+        android:layout_height="@dimen/fashion_card_height" />
 
 </LinearLayout>

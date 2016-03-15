@@ -70,7 +70,7 @@ public class MyCustomReceiver extends ParsePushBroadcastReceiver {
         Bitmap bmp = null;
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.drawable.marker_green)
+                        .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentTitle(STR_Header)
                         .setContentText(STR_Description);
                       /*  .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
@@ -78,7 +78,7 @@ public class MyCustomReceiver extends ParsePushBroadcastReceiver {
 */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
-            mBuilder.setSmallIcon(R.drawable.marker_green);
+            mBuilder.setSmallIcon(R.mipmap.ic_launcher);
             mBuilder.setColor(Color.RED);
           /*  mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
                     R.drawable.myntra));*/

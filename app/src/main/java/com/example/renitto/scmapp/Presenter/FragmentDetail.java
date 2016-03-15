@@ -2,11 +2,18 @@ package com.example.renitto.scmapp.Presenter;
 
 import android.app.Fragment;
 import android.content.pm.ActivityInfo;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsCallback;
+import android.support.customtabs.CustomTabsClient;
+import android.support.customtabs.CustomTabsIntent;
+import android.support.customtabs.CustomTabsSession;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
@@ -25,6 +32,9 @@ public class FragmentDetail extends Fragment implements BaseSliderView.OnSliderC
 
     SliderLayout mDetailheaderSlider,mDetail_promotion_slider;
     ImageView IV_detail_logo;
+    RelativeLayout Rl_menucard_id;
+    String str_menu_card_url = "http://i50.tinypic.com/16hs22p.jpg";
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -44,14 +54,35 @@ public class FragmentDetail extends Fragment implements BaseSliderView.OnSliderC
 
 
 
+        Rl_menucard_id = (RelativeLayout) view.findViewById(R.id.rl_menucard_id);
+
+        Rl_menucard_id.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(str_menu_card_url.contains(".pdf"))
+                //chrome custom tab click
+                ((ActivityHome)getActivity()).showCustomChromTabs(str_menu_card_url);
+
+                else
+                {
+                    FragmentDetail fd = new FragmentDetail();
+                    FragmentMenucard fragmentMenucard = new FragmentMenucard();
+                    fragmentMenucard.setTargetFragment(fd , 0);
+                    fragmentMenucard.show(getActivity().getFragmentManager(), "menucardDialogFragment");
+                }
+            }
+        });
+
+
+
         // detail header slider start
         mDetailheaderSlider = (SliderLayout)view.findViewById(R.id.detail_head_slider);
 
         HashMap<String,String> url_maps = new HashMap<String, String>();
-        url_maps.put("Hannibal", "http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
-        url_maps.put("Big Bang Theory", "http://tvfiles.alphacoders.com/100/hdclearart-10.png");
-        url_maps.put("House of Cards", "http://cdn3.nflximg.net/images/3093/2043093.jpg");
-        url_maps.put("Game of Thrones", "http://images.boomsbeat.com/data/images/full/19640/game-of-thrones-season-4-jpg.jpg");
+        url_maps.put("bucket chicken", "http://s1.stabroeknews.com/images/2016/01/KFC13.jpg");
+        url_maps.put("pack", "https://kfc.com.au/media/1042/group_giantfeast.jpg");
+
 
 
         for(String name : url_maps.keySet()){
@@ -84,10 +115,9 @@ public class FragmentDetail extends Fragment implements BaseSliderView.OnSliderC
         mDetail_promotion_slider = (SliderLayout)view.findViewById(R.id.detail_promotion_slider);
 
         HashMap<String,String> url_maps1 = new HashMap<String, String>();
-        url_maps.put("Hannibal", "http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
-        url_maps.put("Big Bang Theory", "http://tvfiles.alphacoders.com/100/hdclearart-10.png");
-        url_maps.put("House of Cards", "http://cdn3.nflximg.net/images/3093/2043093.jpg");
-        url_maps.put("Game of Thrones", "http://images.boomsbeat.com/data/images/full/19640/game-of-thrones-season-4-jpg.jpg");
+        url_maps1.put("monday offer", "http://pasolinks.com/wp-content/uploads/2013/01/KFC-Tuesday-Treats.jpg");
+        url_maps1.put("offer2", "http://yummychitchat.com/wp-content/uploads/2013/08/2013-0826-KFC-promotion-e1377438176643.jpg");
+
 
 
         for(String name : url_maps1.keySet()){
@@ -109,7 +139,7 @@ public class FragmentDetail extends Fragment implements BaseSliderView.OnSliderC
         mDetail_promotion_slider.setPresetTransformer(SliderLayout.Transformer.Accordion);
         mDetail_promotion_slider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
         mDetail_promotion_slider.setCustomAnimation(new DescriptionAnimation());
-        mDetail_promotion_slider.setDuration(6000);
+        mDetail_promotion_slider.setDuration(7000);
         mDetail_promotion_slider.addOnPageChangeListener(this);
 
 
@@ -144,4 +174,7 @@ public class FragmentDetail extends Fragment implements BaseSliderView.OnSliderC
     public void onSliderClick(BaseSliderView slider) {
 
     }
+
+
+
 }

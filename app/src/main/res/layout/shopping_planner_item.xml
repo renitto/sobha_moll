@@ -11,7 +11,7 @@
     
     <CheckBox
         android:layout_centerHorizontal="true"
-        android:textSize="20sp"
+        android:textSize="@dimen/shp_plnr_header_text_size"
         android:layout_margin="10dp"
         android:textColor="#FFF"
         android:id="@+id/cb_shopping_planner_item"

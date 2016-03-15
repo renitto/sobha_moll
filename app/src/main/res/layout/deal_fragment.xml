@@ -7,16 +7,17 @@
         android:scaleType="fitXY"
         android:id="@+id/iv_deal_banner"
         android:layout_width="match_parent"
-        android:layout_height="70dp" />
+        android:layout_height="@dimen/home_banner_height" />
 
     <RelativeLayout
         android:background="@color/banner_bg"
         android:layout_below="@+id/iv_deal_banner"
         android:id="@+id/rl_deal_desc"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="@dimen/home_headertab_height">
 
         <TextView
+            android:textSize="@dimen/home_headertab_text_size"
             android:textColor="@color/black"
             android:layout_centerInParent="true"
             android:text="DEALS"
@@ -29,7 +30,7 @@
         android:layout_below="@+id/rl_deal_desc"
         android:id="@+id/deal_slider"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="@dimen/home_slider_height"
         />
 
 

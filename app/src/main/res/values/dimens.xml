@@ -3,6 +3,69 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+
+    // home
+    <dimen name="home_colourband_height">10dp</dimen>
+    <dimen name="home_headertab_height">30dp</dimen>
+    <dimen name="home_headertab_text_size">11sp</dimen>
+    <dimen name="home_subheader_text_size">10sp</dimen>
+
+    // home fragment
+    <dimen name="home_banner_height">50dp</dimen>
+    <dimen name="home_title_height">30dp</dimen>
+    <dimen name="home_title_text_size">12sp</dimen>
+    <dimen name="home_slider_height">180dp</dimen>
+
+    <dimen name="home_category_card_height">100dp</dimen>
+    <dimen name="home_arrow_size">20dp</dimen>
+    <dimen name="home_card_tex_size">12sp</dimen>
+
     // how to reach
-    <dimen name="hwtoreach_text_size">12sp</dimen>
+    <dimen name="hwtoreach_text_size">11sp</dimen>
+    <dimen name="hwtoreach_map_height">150dp</dimen>
+
+
+
+    //about mall
+    <dimen name="abt_mall_header_text_size">17sp</dimen>
+    <dimen name="abtmll_desc_text_size">13sp</dimen>
+    <dimen name="abtmll_image_size">200dp</dimen>
+    <dimen name="abtmll_desc_size">100dp</dimen>
+
+    //splash screen
+    <dimen name="splash_image_size">150dp</dimen>
+    <dimen name="splash_main_textsize_size">25sp</dimen>
+    <dimen name="splash_sub_textsize_size">10sp</dimen>
+
+
+    // shopping planner
+    <dimen name="shp_plnr_header_text_margintop">50dp</dimen>
+    <dimen name="shp_plnr_header_text_size">15sp</dimen>
+    <dimen name="shp_plnr_header_addcard_margin">40dp</dimen>
+    <dimen name="shp_plnr_header_addcard_margin_top">140dp</dimen>
+    <dimen name="shp_plnr_header_text_margin">90dp</dimen>
+
+    // details
+    <dimen name="detail_header_logo_height">70dp</dimen>
+
+    //upcoming movies
+    <dimen name="upcoming_movie_card_width">120dp</dimen>
+
+ //deals card
+    <dimen name="deals_card_height">150dp</dimen>
+    <dimen name="deals_card__image_height">130dp</dimen>
+
+    //fashion card
+
+    <dimen name="fashion_card_height">100dp</dimen>
+
+// get mail
+    <dimen name="get_mail_text_size">50sp</dimen>
+
+// tool bar
+
+    <dimen name="home_icon_size">25dp</dimen>
+
+
+
 </resources>

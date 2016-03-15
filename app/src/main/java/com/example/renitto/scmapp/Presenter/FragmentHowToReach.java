@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.renitto.scmapp.R;
@@ -37,7 +39,7 @@ import com.squareup.picasso.Picasso;
 public class FragmentHowToReach extends Fragment {
 
     private GoogleMap googleMap;
-
+    TextView TV_hwtr_phone_number,TV_hwt_weblink;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -62,6 +64,28 @@ public class FragmentHowToReach extends Fragment {
         googleMap.getUiSettings().setCompassEnabled(true);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
+
+        TV_hwtr_phone_number = (TextView)rootView.findViewById(R.id.tv_hwtr_phone_number);
+        TV_hwt_weblink = (TextView)rootView.findViewById(R.id.tv_hwt_weblink);
+
+        TV_hwtr_phone_number.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // calling to that number
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:+"+TV_hwtr_phone_number.getText().toString().trim()));
+                startActivity(callIntent );
+            }
+        });
+
+        TV_hwt_weblink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //chrome custom tab click
+                ((ActivityHome)getActivity()).showCustomChromTabs("http://www.sobhacity.co.in/sobha-citymall-thrissur.html");
+            }
+        });
 
 
         return rootView;

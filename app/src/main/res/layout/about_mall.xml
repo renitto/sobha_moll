@@ -20,30 +20,61 @@
            android:scaleType="fitXY"
            android:id="@+id/iv_about_us_image"
            android:layout_width="match_parent"
-           android:layout_height="250dp" />
+           android:layout_height="@dimen/abtmll_image_size" />
 
-           <TextView
-               android:textSize="25sp"
-               android:text="CELEBRATE LIFE IN COLOURS"
-               android:layout_marginTop="10dp"
+           <LinearLayout
                android:layout_below="@+id/iv_about_us_image"
-               android:id="@+id/tv_about_us_title"
+               android:layout_marginTop="10dp"
+               android:orientation="horizontal"
                android:layout_centerHorizontal="true"
+               android:id="@+id/ll_about_us_title"
                android:layout_width="wrap_content"
-               android:layout_height="wrap_content" />
+               android:layout_height="wrap_content">
+
+               <TextView
+                   android:textColor="@color/dining_color"
+                   android:textSize="@dimen/abt_mall_header_text_size"
+                   android:text="CELEBRATE"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content" />
+
+               <TextView
+                   android:textColor="@color/entertainment_color"
+                   android:textSize="@dimen/abt_mall_header_text_size"
+                   android:text="  LIFE"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content" />
+               <TextView
+                   android:textColor="@color/deals_color"
+                   android:textSize="@dimen/abt_mall_header_text_size"
+                   android:text="  IN"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content" />
+               <TextView
+                   android:textColor="@color/more_color"
+                   android:textSize="@dimen/abt_mall_header_text_size"
+                   android:text="  COLOURS"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content" />
+
+           </LinearLayout>
+
+
+           <ScrollView
+               android:id="@+id/sv_about_mall_desc"
+               android:layout_below="@+id/ll_about_us_title"
+               android:layout_width="match_parent"
+               android:layout_height="@dimen/abtmll_desc_size">
 
            <TextView
-               android:layout_marginLeft="10dp"
-               android:layout_marginRight="10dp"
-               android:layout_marginBottom="10dp"
-               android:text="The one mall where there will be the assured
-                footfalls of more than 3000 residents. There will be many thousands of
-               others too from outside who want a world class mall which offers great shopping, entertainment and recreation with multiplexes, restaurants, food courts, shopping and gaming arcades."
-               android:layout_marginTop="10dp"
-               android:layout_below="@+id/tv_about_us_title"
+               android:textSize="@dimen/abtmll_desc_text_size"
+               android:text="The one mall where there will be the assured footfalls of more than 3000 residents. There will be many thousands of others too from outside who want a world class mall which offers great shopping, entertainment and recreation with multiplexes, restaurants, food courts, shopping and gaming arcades."
+               android:layout_margin="10dp"
                android:id="@+id/tv_about_us_description"
                android:layout_width="wrap_content"
-               android:layout_height="wrap_content" />
+               android:layout_height="match_parent" />
+
+           </ScrollView>
 
            <TextView
                android:id="@+id/tv_aboutmall_howtoreach"
@@ -53,7 +84,7 @@
                android:drawableTop="@drawable/markerblue"
                android:layout_marginBottom="20dp"
                android:layout_centerHorizontal="true"
-               android:layout_below="@+id/tv_about_us_description"
+               android:layout_below="@+id/sv_about_mall_desc"
                android:textColor="#2196F3"
                android:text="How to Reach ?"
                android:layout_width="wrap_content"
