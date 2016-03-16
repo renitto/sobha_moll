@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Shopping">
+        <menu>
+            <item
+                android:id="@+id/nav_fashion"
+                android:title="Fashion" />
+            <item
+                android:id="@+id/nav_health"
+                android:title="Health" />
+            <item
+                android:id="@+id/nav_electronics"
+                android:title="Electronics" />
+            <item
+                android:id="@+id/nav_grocery"
+                android:title="Grocery" />
+        </menu>
+    </item>
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_dining"
+
+            android:title="Dining" />
+        <item
+            android:id="@+id/nav_entertainment"
+            android:title="Entertainment" />
+        <item
+            android:id="@+id/nav_deals"
+            android:title="Deals" />
+
+    </group>
+
+    <item android:title="More">
+        <menu>
+            <item
+                android:id="@+id/nav_aboutmall"
+                android:title="About Mall" />
+            <item
+                android:id="@+id/nav_howtoreach"
+                android:title="How To Reach ?" />
+            <item
+                android:id="@+id/nav_shoppingplanner"
+                android:title="Shopping Planner" />
+
+        </menu>
+    </item>
+
+
+</menu>
