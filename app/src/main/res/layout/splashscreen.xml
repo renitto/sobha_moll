@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#3F51B5"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/splash_iv_image"
+        android:background="@drawable/logo"
+        android:layout_centerInParent="true"
+        android:layout_width="@dimen/splash_image_size"
+        android:layout_height="@dimen/splash_image_size" />
+
+    <RelativeLayout
+        android:background="@color/colorPrimary"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+        <TextView
+            android:textColor="@color/white"
+            android:id="@+id/splash_text_main"
+            android:textSize="@dimen/splash_main_textsize_size"
+            android:gravity="bottom"
+            android:layout_centerHorizontal="true"
+            android:text="SOBHA CITY MALL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+</RelativeLayout>

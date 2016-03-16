@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.renitto.scmapp">
 
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <permission
         android:name="com.example.renitto.scmapp.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />

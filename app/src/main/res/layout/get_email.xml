@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#404040">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_marginTop="60dp"
+            android:textStyle="bold"
+            android:textSize="@dimen/get_mail_text_size"
+            android:text="MAKE"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:textSize="@dimen/get_mail_text_size"
+                android:text="YOUR"
+                android:textColor="@color/light_yellow"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_weight="1.2"
+                android:textStyle="bold"
+                android:textSize="@dimen/get_mail_text_size"
+                android:text="LIFE"
+                android:textColor="@color/more_color"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:textSize="@dimen/get_mail_text_size"
+                android:text="IN"
+                android:textColor="@color/shopping_color"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_weight="4"
+                android:textStyle="bold"
+                android:textSize="@dimen/get_mail_text_size"
+                android:text="COLOURS"
+                android:textColor="@color/light_green"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/et_get_email"
+            android:textSize="16sp"
+            android:inputType="textEmailAddress"
+            android:gravity="center"
+            android:hint="email"
+            android:textColor="@color/entertainment_color"
+            android:background="@color/white"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/bt_get_mail_getin"
+                android:layout_weight="1"
+                android:text="GET IN"
+                android:textColor="@color/white"
+                android:background="@color/shopping_color"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:layout_weight="2"
+                android:textStyle="bold"
+                android:text="Thank you for being with us.
+Watch out for more in your inbox"
+                android:textColor="@color/white"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/bt_get_mail_skip"
+        android:layout_margin="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/white"
+        android:background="@drawable/button_border"
+        android:text="Skip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>
