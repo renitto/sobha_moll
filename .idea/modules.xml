@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SCMapp.iml" filepath="$PROJECT_DIR$/SCMapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sobha_moll.iml" filepath="$PROJECT_DIR$/sobha_moll.iml" />
     </modules>
   </component>
 </project>
