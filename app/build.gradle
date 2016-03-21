@@ -39,4 +39,8 @@ dependencies {
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.mcxiaoke.volley:library-aar:1.0.0'
 
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile project(':tedpermission')
+
+
 }
