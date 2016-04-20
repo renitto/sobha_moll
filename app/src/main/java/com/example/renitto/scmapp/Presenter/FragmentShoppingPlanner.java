@@ -7,9 +7,13 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -36,6 +40,7 @@ public class FragmentShoppingPlanner extends Fragment {
     EditText ET_shopping_planner_item_name;
     ModelShoppingPlanner shop_item;
     DbManager dbManager ;
+    ShoppingPlannerItemAdapter shoppingPlannerItemAdapter;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -53,7 +58,7 @@ public class FragmentShoppingPlanner extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         RV_Shopping_Planner.setLayoutManager(mLayoutManager);
 
-       final ShoppingPlannerItemAdapter shoppingPlannerItemAdapter = new ShoppingPlannerItemAdapter(dbManager.getMyshoppingPlanner(getActivity()));
+        shoppingPlannerItemAdapter = new ShoppingPlannerItemAdapter(dbManager.getMyshoppingPlanner(getActivity()));
 
         RV_Shopping_Planner.setAdapter(shoppingPlannerItemAdapter);
 
@@ -63,17 +68,12 @@ public class FragmentShoppingPlanner extends Fragment {
         ET_shopping_planner_item_name =(EditText)view.findViewById(R.id.et_shopping_planner_item_name);
 
 
+
         BT_shopping_planner_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (!ET_shopping_planner_item_name.getText().toString().equals("") && ET_shopping_planner_item_name.getText().toString().length() != 0)
-                {
-                    shop_item = new ModelShoppingPlanner(ET_shopping_planner_item_name.getText().toString(),false);
-                    shoppingPlannerItemAdapter.addItem(shop_item);
-                    ET_shopping_planner_item_name.setText("");
-                    dbManager.insertToShoppingPlanner(getActivity(),shop_item);
-                }
+              addToPlanner();
 
             }
         });
@@ -84,6 +84,18 @@ public class FragmentShoppingPlanner extends Fragment {
 
                 shoppingPlannerItemAdapter.ClearAllData();
                 dbManager.removeAllShoppingPlanner(getActivity());
+            }
+        });
+
+
+        ET_shopping_planner_item_name.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    addToPlanner();
+                    return true;
+                }
+                return false;
             }
         });
 
@@ -101,6 +113,23 @@ public class FragmentShoppingPlanner extends Fragment {
 
 
         return view;
+    }
+
+
+    public void  addToPlanner()
+    {
+        if (!ET_shopping_planner_item_name.getText().toString().equals("") && ET_shopping_planner_item_name.getText().toString().length() != 0)
+        {
+            shop_item = new ModelShoppingPlanner(ET_shopping_planner_item_name.getText().toString(),false);
+            shoppingPlannerItemAdapter.addItem(shop_item);
+            ET_shopping_planner_item_name.setText("");
+            dbManager.insertToShoppingPlanner(getActivity(),shop_item);
+
+            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            //to hide it, call the method again
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
+        }
     }
 
 

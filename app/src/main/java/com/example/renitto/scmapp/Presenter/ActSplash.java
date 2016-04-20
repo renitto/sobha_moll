@@ -7,11 +7,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.renitto.scmapp.R;
+import com.github.florent37.viewanimator.ViewAnimator;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -33,10 +36,30 @@ public class ActSplash extends AppCompatActivity {
 
 
         TextView TV_header_splash = (TextView) findViewById(R.id.splash_text_main);
-        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Ailerons.otf");
-        TV_header_splash.setTypeface(tf, Typeface.NORMAL);
+        ImageView Splash_iv_image = (ImageView)findViewById(R.id.splash_iv_image);
+//        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Ailerons.otf");
+//        TV_header_splash.setTypeface(tf, Typeface.NORMAL);
 
 
+
+        TV_header_splash.setVisibility(View.GONE);
+
+
+        ViewAnimator
+                .animate(Splash_iv_image)
+                .translationY(-1000, 0)
+                .alpha(0,1)
+                .andAnimate(TV_header_splash)
+                .dp().translationX(-20, 0)
+                .descelerate()
+                .duration(2000)
+
+                .thenAnimate(Splash_iv_image)
+                .scale(1f,0.5f,1f)
+                .accelerate()
+                .duration(1000)
+
+                .start();
 
 
 
@@ -56,7 +79,7 @@ public class ActSplash extends AppCompatActivity {
 
 
             }
-        }, 2000);
+        }, 3000);
 
 
 

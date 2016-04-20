@@ -2,7 +2,6 @@ package com.example.renitto.scmapp.Presenter;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.customtabs.CustomTabsCallback;
@@ -10,7 +9,6 @@ import android.support.customtabs.CustomTabsClient;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsSession;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -25,7 +23,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.renitto.scmapp.R;
 
@@ -138,8 +135,8 @@ public class ActivityHome extends AppCompatActivity  {
 
                 //calling deals fragment
 
-                FragmentDeals fragmentDeals = new FragmentDeals();
-                getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentDeals).addToBackStack("Deals").commit();
+                FragmentOffers fragmentOffers = new FragmentOffers();
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentOffers).addToBackStack("Deals").commit();
 
             }
         });
@@ -195,40 +192,26 @@ public class ActivityHome extends AppCompatActivity  {
             public void onClick(View v) {
 
                 final Fragment_shopping fragment_shopping = new Fragment_shopping();
-
                 RL_menu_Shopping.setBackgroundColor(getResources().getColor(R.color.shopping_color)); // setting base colour
                 RL_menu_deals.setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
                 Rl_menu_dining.setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
                 Rl_menu_entertainment.setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
                 RL_menu_more.setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
-
-                LL_menu_shopping.setVisibility(View.VISIBLE);
+                LL_menu_shopping.setVisibility(View.GONE);
                 LL_menu_more.setVisibility(View.GONE);
 
-
-
-
                 bundle_shopping.putString("fromhome", "Fashion");
-
-                //calling fashion fragment
-
                 fragment_shopping.setArguments(bundle_shopping);
                 replaceFragment(fragment_shopping);
-
 
                 TV_fashion.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         Fragment_shopping fragment_shopping1 = new Fragment_shopping();
-
                         bundle_shopping.putString("fromhome", "Fashion");
-
                         //calling fashion fragment
-
                         fragment_shopping1.setArguments(bundle_shopping);
                         replaceFragment(fragment_shopping1);
-
                         LL_menu_shopping.setVisibility(View.GONE);
                     }
                 });
@@ -236,48 +219,35 @@ public class ActivityHome extends AppCompatActivity  {
                 TV_Health.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-
                         Fragment_shopping fragment_shopping2= new Fragment_shopping();
                         bundle_shopping.putString("fromhome", "Health");
-
                         //calling fashion fragment
-
                         fragment_shopping2.setArguments(bundle_shopping);
                         replaceFragment(fragment_shopping2);
-
                         LL_menu_shopping.setVisibility(View.GONE);
                     }
                 });
+
                 TV_Electronics.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-                        Fragment_shopping fragment_shopping3= new Fragment_shopping();
-
+                       Fragment_shopping fragment_shopping3= new Fragment_shopping();
                         bundle_shopping.putString("fromhome", "Electronics");
-
                         //calling fashion fragment
-
                         fragment_shopping3.setArguments(bundle_shopping);
                         replaceFragment(fragment_shopping3);
-
                         LL_menu_shopping.setVisibility(View.GONE);
                     }
                 });
+
                 TV_Grocery.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-
                         Fragment_shopping fragment_shopping4= new Fragment_shopping();
                         bundle_shopping.putString("fromhome", "Grocery");
-
-                        //calling fashion fragment
-
+                       //calling fashion fragment
                         fragment_shopping4.setArguments(bundle_shopping);
                         replaceFragment(fragment_shopping4);
-
                         LL_menu_shopping.setVisibility(View.GONE);
                     }
                 });
@@ -405,7 +375,7 @@ public class ActivityHome extends AppCompatActivity  {
         prepareMenuItems(builder);
         prepareActionButton(builder);
 
-        builder.setToolbarColor(getResources().getColor(R.color.colorPrimary)).setShowTitle(false);
+        builder.setToolbarColor(getResources().getColor(R.color.white)).setShowTitle(false);
         builder.setStartAnimations(this, R.anim.slide_in_right, R.anim.slide_out_left);
         builder.setExitAnimations(this, R.anim.slide_in_left, R.anim.slide_out_right);
 
@@ -452,6 +422,10 @@ public class ActivityHome extends AppCompatActivity  {
 
 
 
+
+
+
+
     private void setupDrawerContent(final NavigationView navigationView) {
 
         navigationView.setNavigationItemSelectedListener(
@@ -480,7 +454,21 @@ public class ActivityHome extends AppCompatActivity  {
 
 
                         switch (menuItem.getItemId()) {
-                            case R.id.nav_fashion:
+
+
+                            case R.id.nav_home:
+
+                                LL_menu_shopping.setVisibility(View.GONE);
+                                LL_menu_more.setVisibility(View.GONE);
+                                // home icon click here
+                                //calling home fragment
+                                replaceFragment(new FragmentHome());
+
+                                break;
+
+
+
+                            case R.id.nav_shopping:
 
                                 RL_menu_Shopping.setBackgroundColor(getResources().getColor(R.color.shopping_color)); // setting base colour
                                 RL_menu_deals.setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
@@ -510,53 +498,53 @@ public class ActivityHome extends AppCompatActivity  {
                                 getSupportFragmentManager().executePendingTransactions();
                                 break;
 
-                            case R.id.nav_health:
-                                bundle_shopping.putString("fromhome", "Health");
-
-                                Fragment_shopping fragment_shopping7= new Fragment_shopping();
-                                //calling fashion fragment
-
-                                fragment_shopping7.setArguments(bundle_shopping);
-                                replaceFragment(fragment_shopping7);
-                                getSupportFragmentManager().executePendingTransactions();
-                                break;
-
-                            case R.id.nav_electronics:
-                                RL_menu_Shopping.setBackgroundColor(getResources().getColor(R.color.shopping_color)); // setting base colour
-                                RL_menu_deals.setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
-                                Rl_menu_dining.setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
-                                Rl_menu_entertainment.setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
-                                RL_menu_more.setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
-
-                                LL_menu_shopping.setVisibility(View.GONE);
-                                LL_menu_more.setVisibility(View.GONE);
-                                bundle_shopping.putString("fromhome", "Electronics");
-
-                                Fragment_shopping fragment_shopping8= new Fragment_shopping();
-                                //calling fashion fragment
-
-                                fragment_shopping8.setArguments(bundle_shopping);
-                                replaceFragment(fragment_shopping8);
-                                getSupportFragmentManager().executePendingTransactions();
-                                break;
-                            case R.id.nav_grocery:
-                                RL_menu_Shopping.setBackgroundColor(getResources().getColor(R.color.shopping_color)); // setting base colour
-                                RL_menu_deals.setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
-                                Rl_menu_dining.setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
-                                Rl_menu_entertainment.setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
-                                RL_menu_more.setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
-
-                                LL_menu_shopping.setVisibility(View.GONE);
-                                LL_menu_more.setVisibility(View.GONE);
-                                bundle_shopping.putString("fromhome", "Grocery");
-
-                                Fragment_shopping fragment_shopping9= new Fragment_shopping();
-                                //calling fashion fragment
-
-                                fragment_shopping9.setArguments(bundle_shopping);
-                                replaceFragment(fragment_shopping9);
-                                getSupportFragmentManager().executePendingTransactions();
-                                break;
+//                            case R.id.nav_health:
+//                                bundle_shopping.putString("fromhome", "Health");
+//
+//                                Fragment_shopping fragment_shopping7= new Fragment_shopping();
+//                                //calling fashion fragment
+//
+//                                fragment_shopping7.setArguments(bundle_shopping);
+//                                replaceFragment(fragment_shopping7);
+//                                getSupportFragmentManager().executePendingTransactions();
+//                                break;
+//
+//                            case R.id.nav_electronics:
+//                                RL_menu_Shopping.setBackgroundColor(getResources().getColor(R.color.shopping_color)); // setting base colour
+//                                RL_menu_deals.setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+//                                Rl_menu_dining.setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+//                                Rl_menu_entertainment.setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+//                                RL_menu_more.setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+//
+//                                LL_menu_shopping.setVisibility(View.GONE);
+//                                LL_menu_more.setVisibility(View.GONE);
+//                                bundle_shopping.putString("fromhome", "Electronics");
+//
+//                                Fragment_shopping fragment_shopping8= new Fragment_shopping();
+//                                //calling fashion fragment
+//
+//                                fragment_shopping8.setArguments(bundle_shopping);
+//                                replaceFragment(fragment_shopping8);
+//                                getSupportFragmentManager().executePendingTransactions();
+//                                break;
+//                            case R.id.nav_grocery:
+//                                RL_menu_Shopping.setBackgroundColor(getResources().getColor(R.color.shopping_color)); // setting base colour
+//                                RL_menu_deals.setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+//                                Rl_menu_dining.setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+//                                Rl_menu_entertainment.setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+//                                RL_menu_more.setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+//
+//                                LL_menu_shopping.setVisibility(View.GONE);
+//                                LL_menu_more.setVisibility(View.GONE);
+//                                bundle_shopping.putString("fromhome", "Grocery");
+//
+//                                Fragment_shopping fragment_shopping9= new Fragment_shopping();
+//                                //calling fashion fragment
+//
+//                                fragment_shopping9.setArguments(bundle_shopping);
+//                                replaceFragment(fragment_shopping9);
+//                                getSupportFragmentManager().executePendingTransactions();
+//                                break;
 
                             case R.id.nav_dining:
 
@@ -602,7 +590,7 @@ public class ActivityHome extends AppCompatActivity  {
                                 LL_menu_shopping.setVisibility(View.GONE);
 
 
-                                replaceFragment(new FragmentDeals());
+                                replaceFragment(new FragmentOffers());
                                 getSupportFragmentManager().executePendingTransactions();
                                 break;
 
@@ -651,6 +639,38 @@ public class ActivityHome extends AppCompatActivity  {
                         return true;
                     }
                 });
+    }
+    public void onBackPressed() {
+
+
+        FragmentManager fm = getFragmentManager();
+
+
+        if (fm.getBackStackEntryCount() >1) {
+
+            try {
+
+                fm.popBackStack();
+
+
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                finish();
+            }
+
+
+        }
+
+
+        else {
+            finish();
+        }
+
+
+        return;
+
     }
 
 

@@ -30,11 +30,11 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/home_colourband_height">
 
-       <View
-           android:background="@color/shopping_color"
-           android:layout_weight="1"
-           android:layout_width="0dp"
-           android:layout_height="match_parent" />
+        <View
+            android:background="@color/shopping_color"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
         <View
             android:background="@color/dining_color"
             android:layout_weight="1"
@@ -127,7 +127,7 @@
                 android:textSize="@dimen/home_headertab_text_size"
                 android:textColor="@color/white"
                 android:layout_centerInParent="true"
-                android:text="Deals"
+                android:text="Offers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </RelativeLayout>
@@ -169,6 +169,7 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
+            android:visibility="gone"
             android:id="@+id/ll_menu_shopping"
             android:background="#BFDB4868"
             android:orientation="vertical"
@@ -177,39 +178,43 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:textSize="@dimen/home_subheader_text_size"
+                android:layout_marginLeft="2dp"
+                android:textSize="@dimen/home_headertab_text_size"
                 android:id="@+id/tv_fashion"
                 android:textColor="@color/white"
                 android:layout_marginTop="10dp"
-                android:gravity="center"
+                android:gravity="left"
                 android:text="Fashion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <TextView
+                android:layout_marginLeft="2dp"
                 android:id="@+id/tv_health"
-                android:textSize="@dimen/home_subheader_text_size"
+                android:textSize="@dimen/home_headertab_text_size"
                 android:textColor="@color/white"
                 android:layout_marginTop="10dp"
-                android:gravity="center"
+                android:gravity="left"
                 android:text="Health"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <TextView
+                android:layout_marginLeft="2dp"
                 android:id="@+id/tv_electronics"
-                android:textSize="@dimen/home_subheader_text_size"
+                android:textSize="@dimen/home_headertab_text_size"
                 android:textColor="@color/white"
                 android:layout_marginTop="10dp"
-                android:gravity="center"
+                android:gravity="left"
                 android:text="Electronics"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <TextView
+                android:layout_marginLeft="2dp"
                 android:id="@+id/tv_grocery"
-                android:textSize="@dimen/home_subheader_text_size"
+                android:textSize="@dimen/home_headertab_text_size"
                 android:textColor="@color/white"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:gravity="center"
+                android:gravity="left"
                 android:text="Grocery"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -232,30 +237,33 @@
 
 
             <TextView
-                android:textSize="@dimen/home_subheader_text_size"
+                android:layout_marginLeft="2dp"
+                android:textSize="@dimen/home_headertab_text_size"
                 android:id="@+id/tv_about_mall"
                 android:textColor="@color/white"
                 android:layout_marginTop="10dp"
-                android:gravity="center"
+                android:gravity="left"
                 android:text="About Mall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <TextView
-                android:textSize="@dimen/home_subheader_text_size"
+                android:layout_marginLeft="2dp"
+                android:textSize="@dimen/home_headertab_text_size"
                 android:id="@+id/tv_howtoreach"
                 android:textColor="@color/white"
                 android:layout_marginTop="10dp"
-                android:gravity="center"
+                android:gravity="left"
                 android:text="How To Reach ?"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <TextView
-                android:textSize="@dimen/home_subheader_text_size"
+                android:layout_marginLeft="2dp"
+                android:textSize="@dimen/home_headertab_text_size"
                 android:id="@+id/tv_shopping_planner"
                 android:textColor="@color/white"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:gravity="center"
+                android:gravity="left"
                 android:text="Shopping Planner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

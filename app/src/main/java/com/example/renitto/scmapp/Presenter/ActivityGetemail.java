@@ -64,7 +64,6 @@ public class ActivityGetemail extends AppCompatActivity {
         PermissionListener permissionlistener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
-                Toast.makeText(ActivityGetemail.this, "Permission Granted", Toast.LENGTH_SHORT).show();
 
                 // getting email address automatically
                 Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+

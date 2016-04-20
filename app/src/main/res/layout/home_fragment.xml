@@ -1,13 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
 
-    <ImageView
-        android:scaleType="fitXY"
-        android:id="@+id/iv_home_banner"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/home_banner_height" />
+
+
+        <android.support.design.widget.AppBarLayout
+            android:background="@color/white"
+            android:id="@+id/appbarlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+           >
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <ImageView
+                android:scaleType="fitXY"
+                android:id="@+id/iv_home_banner"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/home_banner_height" />
+
 
     <RelativeLayout
         android:background="@color/banner_bg"
@@ -16,7 +42,10 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/home_title_height">
 
+
+
         <TextView
+            android:id="@+id/whts_happening"
             android:textSize="@dimen/home_title_text_size"
             android:textColor="@color/black"
             android:layout_centerInParent="true"
@@ -33,13 +62,21 @@
         android:layout_height="@dimen/home_slider_height"
         />
 
+            </RelativeLayout>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+
+        </android.support.design.widget.AppBarLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:layout_below="@+id/home_slider"
+        android:layout_below="@+id/appbarlayout"
         android:id="@+id/recycler_home_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />
 
-</RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

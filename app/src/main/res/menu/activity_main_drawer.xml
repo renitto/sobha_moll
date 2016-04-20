@@ -1,24 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Shopping">
-        <menu>
-            <item
-                android:id="@+id/nav_fashion"
-                android:title="Fashion" />
-            <item
-                android:id="@+id/nav_health"
-                android:title="Health" />
-            <item
-                android:id="@+id/nav_electronics"
-                android:title="Electronics" />
-            <item
-                android:id="@+id/nav_grocery"
-                android:title="Grocery" />
-        </menu>
-    </item>
+
 
     <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_home"
+
+            android:title="Home" />
+
+        <item
+            android:id="@+id/nav_shopping"
+
+            android:title="Shopping" />
 
         <item
             android:id="@+id/nav_dining"
@@ -29,7 +24,7 @@
             android:title="Entertainment" />
         <item
             android:id="@+id/nav_deals"
-            android:title="Deals" />
+            android:title="Offers" />
 
     </group>
 

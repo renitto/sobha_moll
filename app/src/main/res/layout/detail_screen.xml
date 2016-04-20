@@ -3,6 +3,16 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <RelativeLayout
         android:background="@color/banner_bg"
         android:id="@+id/rl_detail_desc"
@@ -10,11 +20,11 @@
         android:layout_height="@dimen/home_banner_height">
 
         <TextView
+
             android:textSize="@dimen/home_headertab_text_size"
             android:id="@+id/tv_detail_name"
             android:textColor="@color/black"
             android:layout_centerInParent="true"
-            android:text="KFC"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -26,14 +36,9 @@
         android:layout_height="@dimen/home_slider_height"
         />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+
+
 
 
 
@@ -44,21 +49,37 @@
     android:layout_height="wrap_content">
 
     <ImageView
+        android:scaleType="fitXY"
         android:id="@+id/iv_detail_logo"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="@dimen/detail_header_logo_height" />
 
-    <TextView
-        android:textSize="@dimen/home_subheader_text_size"
-        android:text="nfakfnakfna ananfalkfn aalflf adfjljfa afkankfnak adajlflfj alfaljf
-        aafmalf aflafal
-        aflafj"
-        android:layout_weight="1"
+    <ScrollView
+        android:layout_weight="2"
         android:layout_width="0dp"
+        android:layout_height="@dimen/detail_header_logo_height">
+
+    <TextView
+        android:padding="5dp"
+        android:id="@+id/tv_detail_brand_description"
+        android:textSize="@dimen/home_subheader_text_size"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    </ScrollView>
+
+
+
 
 </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_marginTop="5dp"
@@ -67,22 +88,22 @@
         android:layout_height="50dp">
 
         <TextView
+            android:id="@+id/tv_detail_openhours"
             android:layout_weight="1"
             android:textSize="@dimen/hwtoreach_text_size"
             android:drawablePadding="10dp"
             android:drawableLeft="@drawable/ic_clock"
             android:layout_marginLeft="15dp"
-            android:text="Open 10.00 AM   -  9.00 PM "
             android:layout_width="0dp"
             android:layout_height="wrap_content" />
 
         <TextView
+            android:id="@+id/tv_detail_contact_no"
             android:layout_weight="1"
             android:textSize="@dimen/hwtoreach_text_size"
             android:drawablePadding="10dp"
             android:drawableLeft="@drawable/ic_mobile"
             android:layout_marginLeft="15dp"
-            android:text="0487 - 2379000"
             android:layout_width="0dp"
             android:layout_height="wrap_content" />
 
@@ -95,21 +116,21 @@
         android:layout_height="50dp">
 
         <TextView
+            android:id="@+id/tv_detail_email"
             android:layout_weight="1"
             android:textSize="@dimen/hwtoreach_text_size"
             android:drawablePadding="10dp"
             android:drawableLeft="@drawable/ic_email"
             android:layout_marginLeft="15dp"
-            android:text="info@sobhacitymall.com"
             android:layout_width="0dp"
             android:layout_height="wrap_content" />
         <TextView
+            android:id="@+id/tv_detail_web"
             android:layout_weight="1"
             android:textSize="@dimen/hwtoreach_text_size"
             android:drawablePadding="10dp"
             android:drawableLeft="@drawable/ic_web"
             android:layout_marginLeft="15dp"
-            android:text="www.sobhacitymall.com"
             android:layout_width="0dp"
             android:layout_height="wrap_content" />
 
@@ -138,8 +159,10 @@
         android:layout_height="@dimen/home_slider_height"
         />
 
+        </LinearLayout>
+
+
     </LinearLayout>
 
     </ScrollView>
-
 </LinearLayout>

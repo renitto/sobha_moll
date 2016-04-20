@@ -1,8 +1,10 @@
 package com.example.renitto.scmapp.Presenter;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,13 +14,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.example.renitto.scmapp.DAL.NetworkManager;
+import com.example.renitto.scmapp.Model.ModelHomeContent;
 import com.example.renitto.scmapp.R;
+import com.example.renitto.scmapp.Utils.ConnectionDetector;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -26,51 +32,23 @@ import java.util.HashMap;
 /**
  * Created by Renitto on 2/26/2016.
  */
-public class FragmentHome extends Fragment implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener  {
-    RecyclerView RV_Category;
-    RecyclerView.LayoutManager mLayoutManager;
-    SliderLayout mHomeSlider;
-    ImageView IV_home_Banner;
-    String [] category_names = {"SHOPPING", "DINING", "ENTERTAINMENT","DEALS"};
+public class FragmentHome extends Fragment implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener, NetworkManager.onServerDataRequestListener  {
 
+    @Override
+    public void showData(Object data, int whatToShow) {
 
-    String[] category_image_urls = {"http://www.wholesale7.net/images/201304/goods_img/78852_P_1365300434620.jpg",
-            "http://salishlodge.com/images/masthead_dining_06.jpg",
-            "http://cinemalive.in/wp-content/uploads/2015/12/Monsoon-Mangoes-Release-Date.jpg",
-            "http://www.fundoosale.com/saleAdImage/levis-end-of-season-sale-jan-3-2014.jpg"
+    }
 
-    };
+    Boolean isInternetPresent = false;
+    ConnectionDetector cd;
+    Typeface font;
 
-    int[] categorycolors;
+    TextView tv_whats_happening;
 
-
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        // for starting animation for button
-
-
-        View view = inflater.inflate(R.layout.home_fragment,
-                container, false);
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        IV_home_Banner = (ImageView)view.findViewById(R.id.iv_home_banner);
-
-        //setting home banner here
-        Picasso.with(getActivity())
-                .load("http://www.displaybanner.com/images/sample_banner.jpg")
-                .into(IV_home_Banner);
-
-
-
-        // home slider start
-        mHomeSlider = (SliderLayout)view.findViewById(R.id.home_slider);
-
-        HashMap<String,String> url_maps = new HashMap<String, String>();
-        url_maps.put("Hannibal", "http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
-        url_maps.put("Big Bang Theory", "http://tvfiles.alphacoders.com/100/hdclearart-10.png");
-        url_maps.put("House of Cards", "http://cdn3.nflximg.net/images/3093/2043093.jpg");
-        url_maps.put("Game of Thrones", "http://images.boomsbeat.com/data/images/full/19640/game-of-thrones-season-4-jpg.jpg");
-
+    public void  setSliders(ModelHomeContent homeContent){
+        for(int i=0;i<homeContent.banner_slider.length;i++){
+            url_maps.put(homeContent.banner_slider[i].title,homeContent.banner_slider[i].image);
+        }
 
         for(String name : url_maps.keySet()){
             TextSliderView textSliderView = new TextSliderView(getActivity());
@@ -93,21 +71,77 @@ public class FragmentHome extends Fragment implements BaseSliderView.OnSliderCli
         mHomeSlider.setCustomAnimation(new DescriptionAnimation());
         mHomeSlider.setDuration(4000);
         mHomeSlider.addOnPageChangeListener(this);
+        //setting home banner here
+        Picasso.with(getActivity())
+                .load(homeContent.banner_art)
+                .into(IV_home_Banner);
+
+         category_image_urls[0] = homeContent.tile_images.getShopping();
+         category_image_urls[1] = homeContent.tile_images.getDining();
+         category_image_urls[2] = homeContent.tile_images.getEntertainment();
+         category_image_urls[3] = homeContent.tile_images.getOffers();
+    }
+
+
+
+
+
+    RecyclerView RV_Category;
+    RecyclerView.LayoutManager mLayoutManager;
+    SliderLayout mHomeSlider;
+    ImageView IV_home_Banner;  HashMap<String,String> url_maps;
+    String [] category_names = {"SHOPPING", "DINING", "ENTERTAINMENT","DEALS"};
+
+
+    String[] category_image_urls = new String[4] ;
+
+    int[] categorycolors;
+
+
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        // for starting animation for button
+
+
+        View view = inflater.inflate(R.layout.home_fragment,
+                container, false);
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        IV_home_Banner = (ImageView)view.findViewById(R.id.iv_home_banner);
+
+        tv_whats_happening = (TextView)view.findViewById(R.id.whts_happening);
+
+
+        font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Titillium.otf");
+        tv_whats_happening.setTypeface(font);
+
+
+
+
+
+        // home slider start
+        mHomeSlider = (SliderLayout)view.findViewById(R.id.home_slider);
+
+         url_maps = new HashMap<String, String>();
+
+
+        cd = new ConnectionDetector(getActivity());
+
+        isInternetPresent = cd.isConnectingToInternet();
+
+
+        if (isInternetPresent)
+        NetworkManager.GetDataFromServer(this,NetworkManager.GET_HOME_CONTENTS,getActivity(),null);
+        else
+            Toast.makeText(getActivity(),"Please check your internet connection and try again !",Toast.LENGTH_LONG).show();
 
 
         // home slider end
-
-
         RV_Category = (RecyclerView)view.findViewById(R.id.recycler_home_category);
         mLayoutManager = new LinearLayoutManager(getActivity());
         RV_Category.setLayoutManager(mLayoutManager);
-
         categorycolors = this.getResources().getIntArray(R.array.category_colors);
-
         CategoryItemAdapter categoryItemAdapter = new CategoryItemAdapter(getActivity(), category_names);
-//        ScaleInAnimationAdapter scaleAdapter = new ScaleInAnimationAdapter(searchresultadapter);
-//        scaleAdapter.setInterpolator(new BounceInterpolator());
-//        scaleAdapter.setDuration(1000);
         RV_Category.setAdapter(categoryItemAdapter);
 
 
@@ -127,6 +161,14 @@ public class FragmentHome extends Fragment implements BaseSliderView.OnSliderCli
     @Override
     public void onSliderClick(BaseSliderView slider) {
 
+//        FragmentHome home = new FragmentHome();
+//        FragmentWhatHappening whatHappening = new FragmentWhatHappening();
+//        Bundle args = new Bundle();
+//        args.putString("img",movieDetails.getAvailable()[position].getSynopsis() );
+//        whatHappening.setArguments(args);
+//        whatHappening.setTargetFragment(home , 0);
+//        whatHappening.show(getActivity().getFragmentManager(), "WhatHappeningDialogFragment");
+
     }
 
     @Override
@@ -145,6 +187,11 @@ public class FragmentHome extends Fragment implements BaseSliderView.OnSliderCli
     }
 
 
+
+    @Override
+    public void onErrorResponse(String error) {
+
+    }
 
 
     public class CategoryItemAdapter
@@ -233,6 +280,7 @@ public class FragmentHome extends Fragment implements BaseSliderView.OnSliderCli
 
 
             holder.TV_category_name.setText(category_name[position]);
+            holder.TV_category_name.setTypeface(font);
 
 
 
@@ -245,8 +293,9 @@ public class FragmentHome extends Fragment implements BaseSliderView.OnSliderCli
 
 
 
-            Picasso.with(getActivity())
-                    .load(category_image_urls[position])
+            Picasso.with(getActivity()).load(category_image_urls[position])
+//                    .placeholder(R.color.black)
+//                    .error(R.color.colorPrimary)
                     .resize(getView().getWidth(),getView().getHeight())
                     .onlyScaleDown()
                     .into(holder.IV_category_image);
@@ -260,8 +309,8 @@ public class FragmentHome extends Fragment implements BaseSliderView.OnSliderCli
 
                     if (category_name[position].equals("SHOPPING"))
                     {
-                        Bundle bundle_shopping=new Bundle();
-                        bundle_shopping.putString("fromhome", "Fashion");
+//                        Bundle bundle_shopping=new Bundle();
+//                        bundle_shopping.putString("fromhome", "Fashion");
 
                         getActivity().findViewById(R.id.ll_menu_shopping).setVisibility(View.GONE);
                         getActivity().findViewById(R.id.ll_menu_more).setVisibility(View.GONE);
@@ -274,12 +323,12 @@ public class FragmentHome extends Fragment implements BaseSliderView.OnSliderCli
 
                         //calling shopping fragment
 
-                        Fragment_shopping fragment_shopping= new Fragment_shopping();
+//                        Fragment_shopping fragment_shopping= new Fragment_shopping();
                         //calling fashion fragment
 
-                        fragment_shopping.setArguments(bundle_shopping);
+//                        fragment_shopping.setArguments(bundle_shopping);
 
-                        ((ActivityHome)getActivity()).replaceFragment(fragment_shopping);
+                        replaceFragment(new Fragment_shopping());
 
                     }
                     else  if (category_name[position].equals("DINING"))
@@ -295,7 +344,7 @@ public class FragmentHome extends Fragment implements BaseSliderView.OnSliderCli
 
                         //calling dining fragment
 
-                        ((ActivityHome)getActivity()).replaceFragment(new FragmentDining());
+                       replaceFragment(new FragmentDining());
 
                     }
                     else  if (category_name[position].equals("ENTERTAINMENT"))
@@ -314,7 +363,7 @@ public class FragmentHome extends Fragment implements BaseSliderView.OnSliderCli
 
                         //calling entertainment fragment
 
-                        ((ActivityHome)getActivity()).replaceFragment(new FragmentMollywood());
+                        replaceFragment(new FragmentMollywood());
                     }
                     else  if (category_name[position].equals("DEALS"))
                     {
@@ -329,7 +378,7 @@ public class FragmentHome extends Fragment implements BaseSliderView.OnSliderCli
 
                         //calling deals fragment
 
-                        ((ActivityHome)getActivity()).replaceFragment(new FragmentDeals());
+                        replaceFragment(new FragmentOffers());
 
                     }
 
@@ -358,5 +407,31 @@ public class FragmentHome extends Fragment implements BaseSliderView.OnSliderCli
 
     }
 
+    // for checking each fragmnet in back stack
+    public void replaceFragment (Fragment fragment){
+        String backStateName = fragment.getClass().getName();
 
+        FragmentManager manager = getFragmentManager();
+        boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
+        if (!fragmentPopped){ //fragment not in back stack, create it.
+
+            getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(backStateName).commit();
+
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+
+        mHomeSlider.stopAutoCycle();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onResume() {
+
+        mHomeSlider.startAutoCycle();
+        super.onResume();
+    }
 }

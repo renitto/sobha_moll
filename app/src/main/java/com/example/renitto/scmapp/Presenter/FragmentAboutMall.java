@@ -9,16 +9,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.renitto.scmapp.DAL.NetworkManager;
+import com.example.renitto.scmapp.Model.ModelGeneralQuery;
 import com.example.renitto.scmapp.R;
 import com.squareup.picasso.Picasso;
 
 /**
  * Created by Renitto on 2/26/2016.
  */
-public class FragmentAboutMall extends Fragment {
+public class FragmentAboutMall extends Fragment implements NetworkManager.onServerDataRequestListener {
 
     ImageView IV_about_banner;
-    TextView TV_aboutmall_howtoreach;
+    TextView TV_aboutmall_howtoreach,TV_about_us_description;
+    ModelGeneralQuery generalQuery;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -31,6 +34,7 @@ public class FragmentAboutMall extends Fragment {
 
         IV_about_banner = (ImageView) view.findViewById(R.id.iv_about_us_image);
         TV_aboutmall_howtoreach = (TextView)view.findViewById(R.id.tv_aboutmall_howtoreach);
+        TV_about_us_description = (TextView)view.findViewById(R.id.tv_about_us_description);
 
         TV_aboutmall_howtoreach.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,11 +53,45 @@ public class FragmentAboutMall extends Fragment {
             }
         });
 
-        //setting home banner here
-        Picasso.with(getActivity())
-                .load("http://www.sensationslife.in/sites/default/files/sobha-city-mall-1.jpg")
 
-                .into(IV_about_banner);
+        setAboutData();
+
+
+
         return view;
+    }
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        NetworkManager.GetDataFromServer(this,NetworkManager.GET_GENERALQUERY_CONTENTS,getActivity(),null);
+    }
+
+    @Override
+    public void showData(Object data, int whatToShow) {
+
+         generalQuery = (ModelGeneralQuery) data;
+        setAboutData();
+
+
+    }
+
+    public void setAboutData()
+    {
+        if (generalQuery != null) {
+            //setting home banner here
+            Picasso.with(getActivity())
+                    .load(generalQuery.getImage())
+
+                    .into(IV_about_banner);
+
+            TV_about_us_description.setText(generalQuery.getDescription());
+        }
+    }
+
+    @Override
+    public void onErrorResponse(String error) {
+
     }
 }

@@ -31,8 +31,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/tv_dummy"
                 android:background="@drawable/line"
-                android:layout_width="@dimen/home_arrow_size"
-                android:layout_height="@dimen/home_arrow_size" />
+                android:layout_width="@dimen/home_arrow_width"
+                android:layout_height="1dp" />
 
         </RelativeLayout>
 
@@ -55,13 +55,13 @@
             <ImageView
                 android:layout_above="@+id/v_dummy"
                 android:background="@drawable/arrowright"
-                android:layout_width="@dimen/home_arrow_size"
-                android:layout_height="@dimen/home_arrow_size" />
+                android:layout_width="@dimen/home_arrow_width"
+                android:layout_height="@dimen/home_arrow_height" />
             <View
                 android:id="@+id/v_dummy"
                 android:layout_centerVertical="true"
                 android:layout_width="0dp"
-                android:layout_height="1dp"/>
+                android:layout_height="2dp"/>
 
             </RelativeLayout>
 

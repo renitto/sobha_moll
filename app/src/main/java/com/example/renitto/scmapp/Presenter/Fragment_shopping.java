@@ -16,8 +16,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.example.renitto.scmapp.DAL.NetworkManager;
+import com.example.renitto.scmapp.Model.ModelFashion;
+import com.example.renitto.scmapp.Model.ModelSubCategories;
 import com.example.renitto.scmapp.R;
+import com.example.renitto.scmapp.Utils.ConnectionDetector;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -26,10 +31,14 @@ import java.util.List;
 
 
 
-public class Fragment_shopping extends Fragment {
+public class Fragment_shopping extends Fragment implements   NetworkManager.onServerDataRequestListener{
 
     ImageView IV_Shopping_Banner;
-
+    ModelFashion fashion;
+    private String[] params = new String[1];
+    ModelSubCategories subCategories = new ModelSubCategories();
+    ViewPager viewPager;
+    TabLayout tabLayout;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 
@@ -38,50 +47,104 @@ public class Fragment_shopping extends Fragment {
                 container, false);
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        ViewPager viewPager = (ViewPager)view.findViewById(R.id.shopping_viewpager);
-        if (viewPager != null) {
-            setupViewPager(viewPager);
-        }
+        tabLayout = (TabLayout)view.findViewById(R.id.shopping_tabs);
+
+         viewPager = (ViewPager)view.findViewById(R.id.shopping_viewpager);
+     
 
         IV_Shopping_Banner = (ImageView)view.findViewById(R.id.iv_shopping_banner);
 
-        //setting home banner here
-        Picasso.with(getActivity())
-                .load("http://www.displaybanner.com/images/sample_banner.jpg")
-                .into(IV_Shopping_Banner);
 
 
-        TabLayout tabLayout = (TabLayout)view.findViewById(R.id.shopping_tabs);
-        tabLayout.setupWithViewPager(viewPager);
+        setMaincontents();
+        setSubCategories();
+   
+       
 
-
-        String strtext = getArguments().getString("fromhome");
-        if (strtext.equals("Fashion")) {
-            viewPager.setCurrentItem(0);
-        }
-        else  if (strtext.equals("Health")) {
-            viewPager.setCurrentItem(1);
-        }
-        else  if (strtext.equals("Electronics")) {
-            viewPager.setCurrentItem(2);
-        }
-        else  if (strtext.equals("Grocery")) {
-            viewPager.setCurrentItem(3);
-        }
 
 
         return view;
 
     }
 
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        params[0] = "34";
+
+        NetworkManager.GetDataFromServer(this, NetworkManager.GET_SHOPPING_FASHION_CONTENTS, getActivity(), params);
+        NetworkManager.GetDataFromServer(this,NetworkManager.GET_SUBCATEGORY_CONTENTS,getActivity(),null);
+    }
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getChildFragmentManager());
-        adapter.addFragment(new FragmentFashion(), "Fashion");
-        adapter.addFragment(new FragmentHealth(), "Health");
-        adapter.addFragment(new FragmentElectronics(), "Electronics");
-        adapter.addFragment(new FragmentGrocery(), "Grocery");
+
+
+
+        for (int i=0;i<subCategories.shopping.length;i++) {
+            FragmentFashion frag = new FragmentFashion();
+            Bundle args = new Bundle();
+            args.putString("shopp_id", subCategories.shopping[i].getId());
+            frag.setArguments(args);
+            adapter.addFragment(frag, subCategories.shopping[i].getName());
+        }
         viewPager.setAdapter(adapter);
+    }
+
+    @Override
+    public void showData(Object data, int whatToShow) {
+        if (data!=null)
+        {
+            if(whatToShow==NetworkManager.GET_SHOPPING_FASHION_CONTENTS) {
+                fashion = (ModelFashion) data;
+                setMaincontents();
+
+            }
+            else if(whatToShow==NetworkManager.GET_SUBCATEGORY_CONTENTS)
+            {
+                subCategories = (ModelSubCategories)data;
+
+                setSubCategories();
+
+            }
+        }
+    }
+
+
+    public void setMaincontents()
+    {
+
+        if (fashion != null) {
+            //setting home banner here
+            Picasso.with(getActivity())
+                    .load(fashion.banner_art)
+                    .into(IV_Shopping_Banner);
+        }
+    }
+
+    public void setSubCategories()
+    {
+        if (subCategories.shopping != null)
+            if (viewPager != null) {
+                setupViewPager(viewPager);
+                tabLayout.setupWithViewPager(viewPager);
+                if(subCategories.shopping.length<4)
+                {
+                    tabLayout.setTabMode(TabLayout.MODE_FIXED);
+                }
+                else
+                {
+                    tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+                }
+            }
+    }
+
+    @Override
+    public void onErrorResponse(String error) {
+
     }
 
     static class Adapter extends FragmentPagerAdapter {
@@ -112,5 +175,7 @@ public class Fragment_shopping extends Fragment {
             return mFragmentTitles.get(position);
         }
     }
+
+
 
 }

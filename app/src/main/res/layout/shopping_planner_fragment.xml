@@ -18,62 +18,59 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/cv_shopping_planner_ad_text"
-        android:layout_marginBottom="10dp"
-        app:cardBackgroundColor="#C5DFF1"
-        android:elevation="5dp"
-        android:layout_marginTop="@dimen/shp_plnr_header_addcard_margin_top"
-        android:layout_marginLeft="@dimen/shp_plnr_header_addcard_margin"
-        android:layout_marginRight="@dimen/shp_plnr_header_addcard_margin"
-        app:cardCornerRadius="15dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/tv_shopping_planner_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
         <RelativeLayout
+            android:layout_marginTop="100dp"
+            android:layout_below="@+id/tv_shopping_planner_header"
+            android:id="@+id/rl_data_enter"
             android:elevation="5dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
         <EditText
+
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:layout_centerHorizontal="true"
+            android:paddingLeft="10dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:paddingRight="30dp"
             android:textSize="@dimen/shp_plnr_header_text_size"
             android:textColorHint="@color/more_color"
-            android:textColor="@color/white"
-            android:background="@android:color/transparent"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="10dp"
+            android:textColor="@color/shopping_color"
+            android:background="@drawable/rounded_edittext"
             android:id="@+id/et_shopping_planner_item_name"
             android:hint="       Type the item here        "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <Button
-
-            android:layout_marginRight="15dp"
-            android:background="@drawable/rightarrowblue"
+            android:color="@color/shopping_color"
+            android:drawableLeft="@drawable/long_arrow_right"
+           android:background="@drawable/rounded_edittext"
+            android:layout_centerVertical="true"
+            android:layout_height="30dp"
+            android:layout_width="30dp"
+            android:layout_alignRight="@+id/et_shopping_planner_item_name"
             android:id="@+id/bt_shopping_planner_add"
-            android:layout_alignParentRight="true"
-            android:layout_width="25dp"
-            android:layout_height="50dp" />
+            />
 
         </RelativeLayout>
 
-    </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.RecyclerView
-        android:layout_below="@+id/cv_shopping_planner_ad_text"
+        android:layout_below="@+id/rl_data_enter"
         android:id="@+id/recycler_shopping_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
         />
 
     <Button
+
         android:padding="10dp"
-        android:textSize="@dimen/shp_plnr_header_text_size"
+        android:textSize="@dimen/shp_plnr_cncl_button_text_size"
         android:layout_marginBottom="20dp"
         android:layout_alignParentBottom="true"
         android:textColor="@color/white"

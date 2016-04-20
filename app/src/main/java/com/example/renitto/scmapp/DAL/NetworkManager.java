@@ -3,14 +3,26 @@ package com.example.renitto.scmapp.DAL;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.renitto.scmapp.Application;
+import com.example.renitto.scmapp.Model.ModelBrandDetails;
+import com.example.renitto.scmapp.Model.ModelBrands;
+import com.example.renitto.scmapp.Model.ModelEntertainmentBrand;
+import com.example.renitto.scmapp.Model.ModelFashion;
+import com.example.renitto.scmapp.Model.ModelGeneralQuery;
 import com.example.renitto.scmapp.Model.ModelHomeContent;
+import com.example.renitto.scmapp.Model.ModelMovieDetails;
+import com.example.renitto.scmapp.Model.ModelOffer;
+import com.example.renitto.scmapp.Model.ModelSubCategories;
+import com.example.renitto.scmapp.Presenter.FragmentHome;
+import com.example.renitto.scmapp.Utils.ConnectionDetector;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -38,6 +50,14 @@ public class NetworkManager {
 
 
     public static final int GET_HOME_CONTENTS = 1;
+    public static final int GET_ENTERTAINMENT_BRAND_CONTENTS = 2;
+    public static final int GET_SHOPPING_FASHION_CONTENTS = 3;
+    public static final int GET_BRAND_CONTENTS = 4;
+    public static final int GET_BRAND_DETAIL_CONTENTS = 5;
+    public static final int GET_MOVIE_DETAIL_CONTENTS = 6 ;
+    public static final int GET_OFFER_DETAIL_CONTENTS = 7 ;
+    public static final int GET_SUBCATEGORY_CONTENTS = 8 ;
+    public static final int GET_GENERALQUERY_CONTENTS = 9 ;
 
 
     //  Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new NetDateTimeAdapter()).create();
@@ -59,6 +79,8 @@ public class NetworkManager {
         final ProgressDialog pDialog = new ProgressDialog(context);
         pDialog.setMessage("Loading...");
         pDialog.show();
+        pDialog.setCanceledOnTouchOutside(false);
+        pDialog.setCancelable(false);
 
         final Gson gson = new GsonHelper().getGson();
 
@@ -110,52 +132,109 @@ public class NetworkManager {
     }
     public static void GetDataFromServer(final onServerDataRequestListener listener, final int whatToFetch, Context context, String[] params) {
 
-        final  ProgressDialog pDialog = new ProgressDialog(context);
-        pDialog.setMessage("Loading...");
-        pDialog.show();
+if(new ConnectionDetector(context).isConnectingToInternet()) {
+
+    final ProgressDialog pDialog = new ProgressDialog(context);
+    pDialog.setMessage("Loading...");
+    pDialog.show();
+    pDialog.setCanceledOnTouchOutside(false);
+    pDialog.setCancelable(false);
 
 
-
-        final Gson gson = new GsonHelper().getGson();
+    final Gson gson = new GsonHelper().getGson();
 //       final Gson gson = new GsonBuilder()
 //                .setDateFormat("dd-MM-yyyy")
 //                .create();
 //               .registerTypeAdapter(Date.class, new NetDateTimeAdapter())
 //                .setDateFormat("dd-MM-yyyy")
 //                .create();
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, getUrl(whatToFetch,params),
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        switch (whatToFetch) {
+    StringRequest stringRequest = new StringRequest(Request.Method.GET, getUrl(whatToFetch, params),
+            new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    switch (whatToFetch) {
 
-                            case GET_HOME_CONTENTS:
-                                listener.showData(gson.fromJson(response, ModelHomeContent.class), GET_HOME_CONTENTS);
-                                break;
+                        case GET_HOME_CONTENTS:
+
+                            ((FragmentHome) listener).setSliders(gson.fromJson(response, ModelHomeContent.class));
+                            //   listener.showData(gson.fromJson(response, ModelHomeContent.class), GET_HOME_CONTENTS);
+                            break;
+
+                        case GET_ENTERTAINMENT_BRAND_CONTENTS:
+
+//                                ((FragmentHome)listener).setSliders(gson.fromJson(response, ModelHomeContent.class));
+                            listener.showData(gson.fromJson(response, ModelEntertainmentBrand.class), GET_ENTERTAINMENT_BRAND_CONTENTS);
+                            break;
+
+                        case GET_SHOPPING_FASHION_CONTENTS:
+
+//                                ((FragmentHome)listener).setSliders(gson.fromJson(response, ModelHomeContent.class));
+                            listener.showData(gson.fromJson(response, ModelFashion.class), GET_SHOPPING_FASHION_CONTENTS);
+                            break;
+
+                        case GET_BRAND_CONTENTS:
+
+//                                ((FragmentHome)listener).setSliders(gson.fromJson(response, ModelHomeContent.class));
+                            listener.showData(gson.fromJson(response, ModelBrands.class), GET_BRAND_CONTENTS);
+                            break;
+
+                        case GET_BRAND_DETAIL_CONTENTS:
+
+//                                ((FragmentHome)listener).setSliders(gson.fromJson(response, ModelHomeContent.class));
+                            listener.showData(gson.fromJson(response, ModelBrandDetails.class), GET_BRAND_DETAIL_CONTENTS);
+                            break;
+                        case GET_MOVIE_DETAIL_CONTENTS:
+
+//                                ((FragmentHome)listener).setSliders(gson.fromJson(response, ModelHomeContent.class));
+                            listener.showData(gson.fromJson(response, ModelMovieDetails.class), GET_MOVIE_DETAIL_CONTENTS);
+                            break;
+
+                        case GET_OFFER_DETAIL_CONTENTS:
+
+//                                ((FragmentHome)listener).setSliders(gson.fromJson(response, ModelHomeContent.class));
+                            listener.showData(gson.fromJson(response, ModelOffer.class), GET_OFFER_DETAIL_CONTENTS);
+
+                            break;
+
+                        case GET_SUBCATEGORY_CONTENTS:
+
+//                                ((FragmentHome)listener).setSliders(gson.fromJson(response, ModelHomeContent.class));
+                            listener.showData(gson.fromJson(response, ModelSubCategories.class), GET_SUBCATEGORY_CONTENTS);
+
+                            break;
+
+                        case GET_GENERALQUERY_CONTENTS:
+
+//                                ((FragmentHome)listener).setSliders(gson.fromJson(response, ModelHomeContent.class));
+                            listener.showData(gson.fromJson(response, ModelGeneralQuery.class), GET_GENERALQUERY_CONTENTS);
+
+                            break;
 
 
-
-
-                        }
-
-
-                        pDialog.hide();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
 
-                // Error handling
-                System.out.println("Something went wrong!");
-                error.printStackTrace();
-                listener.onErrorResponse(error.getLocalizedMessage());
 
-                pDialog.hide();
+                    pDialog.hide();
+                }
+            }, new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
 
-            }
-        });
-        Application.getInstance().addToRequestQueue(stringRequest);
+            // Error handling
+            System.out.println("Something went wrong!");
+            error.printStackTrace();
+            listener.onErrorResponse(error.getLocalizedMessage());
 
+            pDialog.hide();
+
+        }
+    });
+    stringRequest.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 2, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+    Application.getInstance().addToRequestQueue(stringRequest);
+
+   }
+    else
+    Toast.makeText(context,"Please check your internet connection and try again !",Toast.LENGTH_LONG).show();
 
     }
 
@@ -169,6 +248,7 @@ public class NetworkManager {
        // String base_url="http://pepperapp.singnetsolutions.com.sg/service1.svc/";
 
         String base_url = "http://sobhacitymall.sweans.org/api/";
+        String hash_key = "fv3wqt7g1lpu4verta2q";
 
         String userid;
         switch (whatToDo) {
@@ -176,7 +256,42 @@ public class NetworkManager {
 
             case GET_HOME_CONTENTS:
 
-                return base_url + "getdetails.php?tab=home&hash=fv3wqt7g1lpu4verta2q";
+                return base_url + "getdetails.php?tab=home&hash=" + hash_key;
+
+            case GET_ENTERTAINMENT_BRAND_CONTENTS:
+
+                return base_url + "get-brand-details.php?brand-id=inox&hash=" + hash_key;
+
+            case GET_SHOPPING_FASHION_CONTENTS:
+
+                String cat_id=params[0];
+                return base_url + "get-category-details.php?category-id="+ cat_id +"&hash=" + hash_key;
+
+            case GET_BRAND_CONTENTS:
+
+                String brand_cat_id=params[0];
+
+                return base_url + "get-category-brands.php?category-id="+ brand_cat_id +"&hash=" + hash_key;
+
+            case GET_BRAND_DETAIL_CONTENTS:
+                String branch_id=  params[0];
+                return base_url + "get-brand-details.php?brand-id=" + branch_id +"&hash=" + hash_key;
+
+            case GET_MOVIE_DETAIL_CONTENTS:
+                String movie_cat_id=  params[0];
+                return base_url + "get-movies.php?category=" + movie_cat_id +"&hash=" + hash_key;
+
+            case GET_OFFER_DETAIL_CONTENTS:
+
+                return base_url + "get-offers-page-details.php?&hash=" + hash_key;
+
+            case GET_SUBCATEGORY_CONTENTS:
+
+                return base_url + "general-queries.php?action=get-category-list&hash=" + hash_key;
+
+            case GET_GENERALQUERY_CONTENTS:
+
+                return base_url + "general-queries.php?action=get-page-details&page-id=about&hash=" + hash_key;
 
             default:
                 return null;
@@ -222,5 +337,5 @@ public class NetworkManager {
 
     }
 
-    public static String image_base_url="http://192.168.0.3/pepperjsonservice/";
+
 }

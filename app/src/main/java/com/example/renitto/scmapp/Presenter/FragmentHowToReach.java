@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.renitto.scmapp.R;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -39,13 +40,25 @@ import com.squareup.picasso.Picasso;
 public class FragmentHowToReach extends Fragment {
 
     private GoogleMap googleMap;
-    TextView TV_hwtr_phone_number,TV_hwt_weblink;
+    TextView TV_hwtr_phone_number,TV_hwt_weblink,TV_hwt_email;
 
+    View rootView;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         // for starting animation for button
 
-        View rootView = inflater.inflate(R.layout.how_to_reach, container, false);
+
+
+        if (rootView != null) {
+            ViewGroup parent = (ViewGroup) rootView.getParent();
+            if (parent != null)
+                parent.removeView(rootView);
+        }
+        try {
+            rootView = inflater.inflate(R.layout.how_to_reach, container, false);
+        } catch (InflateException e) {
+        /* map is already there, just return view as it is */
+        }
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -67,13 +80,14 @@ public class FragmentHowToReach extends Fragment {
 
         TV_hwtr_phone_number = (TextView)rootView.findViewById(R.id.tv_hwtr_phone_number);
         TV_hwt_weblink = (TextView)rootView.findViewById(R.id.tv_hwt_weblink);
+        TV_hwt_email = (TextView)rootView.findViewById(R.id.tv_hwt_email);
 
         TV_hwtr_phone_number.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // calling to that number
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:+"+TV_hwtr_phone_number.getText().toString().trim()));
+                callIntent.setData(Uri.parse("tel:+"+"04872379000"));
                 startActivity(callIntent );
             }
         });
@@ -84,6 +98,16 @@ public class FragmentHowToReach extends Fragment {
 
                 //chrome custom tab click
                 ((ActivityHome)getActivity()).showCustomChromTabs("http://www.sobhacity.co.in/sobha-citymall-thrissur.html");
+            }
+        });
+
+        TV_hwt_email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent (Intent.ACTION_VIEW , Uri.parse("mailto:" + "info@sobhacitymall.com"));
+                intent.putExtra(Intent.EXTRA_SUBJECT, "About Mall");
+                intent.putExtra(Intent.EXTRA_TEXT, "Hi sobha city mall");
+                startActivity(intent);
             }
         });
 

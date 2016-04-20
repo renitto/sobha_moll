@@ -8,9 +8,14 @@
 
    <android.support.v7.widget.CardView
        android:elevation="5dp"
-       android:layout_margin="20dp"
+       android:layout_margin="10dp"
        android:layout_width="match_parent"
-       android:layout_height="wrap_content">
+       android:layout_height="match_parent">
+
+
+       <ScrollView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
 
        <RelativeLayout
            android:layout_width="match_parent"
@@ -50,41 +55,45 @@
                    android:text="  IN"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content" />
-               <TextView
-                   android:textColor="@color/more_color"
-                   android:textSize="@dimen/abt_mall_header_text_size"
-                   android:text="  COLOURS"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content" />
+
 
            </LinearLayout>
 
+           <TextView
 
-           <ScrollView
-               android:id="@+id/sv_about_mall_desc"
+               android:layout_centerHorizontal="true"
+               android:id="@+id/tv_title_two"
                android:layout_below="@+id/ll_about_us_title"
-               android:layout_width="match_parent"
-               android:layout_height="@dimen/abtmll_desc_size">
+               android:textColor="@color/more_color"
+               android:textSize="@dimen/abt_mall_header_text_size"
+               android:text="COLOUR"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content" />
+
+
+
+
+
 
            <TextView
+               android:layout_below="@+id/tv_title_two"
                android:textSize="@dimen/abtmll_desc_text_size"
-               android:text="The one mall where there will be the assured footfalls of more than 3000 residents. There will be many thousands of others too from outside who want a world class mall which offers great shopping, entertainment and recreation with multiplexes, restaurants, food courts, shopping and gaming arcades."
-               android:layout_margin="10dp"
+               android:padding="10dp"
                android:id="@+id/tv_about_us_description"
                android:layout_width="wrap_content"
-               android:layout_height="match_parent" />
+               android:layout_height="wrap_content" />
 
-           </ScrollView>
+
 
            <TextView
                android:id="@+id/tv_aboutmall_howtoreach"
-               android:layout_marginTop="20dp"
+               android:layout_marginTop="10dp"
                android:drawablePadding="5dp"
                android:textSize="15sp"
                android:drawableTop="@drawable/markerblue"
-               android:layout_marginBottom="20dp"
+               android:layout_marginBottom="5dp"
                android:layout_centerHorizontal="true"
-               android:layout_below="@+id/sv_about_mall_desc"
+               android:layout_below="@+id/tv_about_us_description"
                android:textColor="#2196F3"
                android:text="How to Reach ?"
                android:layout_width="wrap_content"
@@ -93,6 +102,8 @@
 
 
        </RelativeLayout>
+
+       </ScrollView>
 
 
    </android.support.v7.widget.CardView>

@@ -2,6 +2,7 @@ package com.example.renitto.scmapp.Presenter;
 
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -12,36 +13,45 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.example.renitto.scmapp.DAL.NetworkManager;
+import com.example.renitto.scmapp.Model.ModelBrands;
+import com.example.renitto.scmapp.Model.ModelFashion;
 import com.example.renitto.scmapp.R;
+import com.example.renitto.scmapp.Utils.Adanimation;
+import com.example.renitto.scmapp.Utils.ConnectionDetector;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
+import java.util.Random;
 
 /**
  * Created by Renitto on 2/28/2016.
+ *
+ *
  */
-public class FragmentFashion extends Fragment implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener  {
+
+
+public class FragmentFashion extends Fragment implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener , NetworkManager.onServerDataRequestListener  {
     RecyclerView RV_Shopping;
     RecyclerView.LayoutManager mLayoutManager;
     SliderLayout mShoppingSlider;
+    ModelFashion modelFashion;
+    HashMap<String,String> url_maps;
+    ShoppingItemAdapter shoppingItemAdapter;
+    ModelBrands brands;
+    private String[] params = new String[1];
+    Bundle bundle_fashion= new Bundle();
+    FragmentDetail fragmentDetail = new FragmentDetail();
 
-    String [] brand_names = {"Flat40% off malabar gold and diamonds" , "KFC super wednesdays", "PVR offer"};
-
-
-    String[] brand_image_urls = {"http://mms.businesswire.com/bwapps/mediaserver/ViewMedia?mgid=339102&vid=4&download=1",
-            "http://nh1factorystores.com/wp-content/uploads/2014/02/peterengland-logo1.jpg",
-            "http://www.couponmummy.com/couponsimages/181Basics-Life-logo.jpg",
-            "http://c1cleantechnicacom.wpengine.netdna-cdn.com/files/2012/08/Woodland-logo-620x350.jpeg",
-            "https://www.phactual.com/wp-content/uploads/2015/05/nike-logo.jpg",
-
-    };
-
+    ConnectionDetector cd;
+    Boolean isInternetPresent = false;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,33 +69,17 @@ public class FragmentFashion extends Fragment implements BaseSliderView.OnSlider
         // home slider start
         mShoppingSlider = (SliderLayout)view.findViewById(R.id.shoppping_slider);
 
-        HashMap<String,String> url_maps = new HashMap<String, String>();
-        url_maps.put("basics", "http://blogs.allmytrip.in/wp-content/uploads/2014/10/Basics-Life1.jpg");
-        url_maps.put("woodland", "http://soulsteer.com/wp-content/uploads/2013/01/Woodland-Explore-More2.png");
+        url_maps = new HashMap<String, String>();
 
 
 
-        for(String name : url_maps.keySet()){
-            TextSliderView textSliderView = new TextSliderView(getActivity());
-            // initialize a SliderLayout
-            textSliderView
-                    .description(name)
-                    .image(url_maps.get(name))
-                    .setScaleType(BaseSliderView.ScaleType.Fit)
-                    .setOnSliderClickListener(this);
+        cd = new ConnectionDetector(getActivity());
 
-            //add your extra information
-            textSliderView.bundle(new Bundle());
-            textSliderView.getBundle()
-                    .putString("extra",name);
+        isInternetPresent = cd.isConnectingToInternet();
 
-            mShoppingSlider.addSlider(textSliderView);
-        }
-        mShoppingSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
-        mShoppingSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-        mShoppingSlider.setCustomAnimation(new DescriptionAnimation());
-        mShoppingSlider.setDuration(4000);
-        mShoppingSlider.addOnPageChangeListener(this);
+
+
+
 
 
         // home slider end
@@ -97,11 +91,17 @@ public class FragmentFashion extends Fragment implements BaseSliderView.OnSlider
 
 
 
-        ShoppingItemAdapter shoppingItemAdapter = new ShoppingItemAdapter(getActivity(), brand_image_urls);
-//        ScaleInAnimationAdapter scaleAdapter = new ScaleInAnimationAdapter(searchresultadapter);
-//        scaleAdapter.setInterpolator(new BounceInterpolator());
-//        scaleAdapter.setDuration(1000);
-        RV_Shopping.setAdapter(shoppingItemAdapter);
+        setSliderData();
+        setBrandData();
+
+
+
+
+
+
+
+
+
 
 
 
@@ -109,6 +109,50 @@ public class FragmentFashion extends Fragment implements BaseSliderView.OnSlider
         return view;
 
     }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        params[0] = getArguments().getString("shopp_id");
+
+//        if (isInternetPresent)
+//
+//        {
+        NetworkManager.GetDataFromServer(this, NetworkManager.GET_SHOPPING_FASHION_CONTENTS, getActivity(), params);
+        NetworkManager.GetDataFromServer(this, NetworkManager.GET_BRAND_CONTENTS, getActivity(), params);
+//        }
+//
+//        else
+//            Toast.makeText(getActivity(),"Please check your internet connection and try again !",Toast.LENGTH_LONG).show();
+    }
+
+    public  void  setSliderData()
+    {
+
+        if(modelFashion!=null) {
+            if (modelFashion.banner_slider != null) {
+                mShoppingSlider.setVisibility(View.VISIBLE);
+                setSliders(modelFashion);
+            } else
+                mShoppingSlider.setVisibility(View.GONE);
+        }
+
+    }
+
+    public void setBrandData()
+    {
+
+        if (brands != null) {
+            shoppingItemAdapter = new ShoppingItemAdapter(getActivity(), brands);
+            RV_Shopping.setAdapter(shoppingItemAdapter);
+        }
+
+    }
+
+
+
+
 
     @Override
     public void onStop() {
@@ -137,13 +181,39 @@ public class FragmentFashion extends Fragment implements BaseSliderView.OnSlider
 
     }
 
+    @Override
+    public void showData(Object data, int whatToShow) {
 
+        if (whatToShow == NetworkManager.GET_SHOPPING_FASHION_CONTENTS ) {
+            if (data != null) {
+                modelFashion = (ModelFashion) data;
+
+                setSliderData();
+
+            }
+        }
+        else if(whatToShow == NetworkManager.GET_BRAND_CONTENTS )
+        {
+            if (data != null) {
+
+                brands = (ModelBrands)data;
+
+                setBrandData();
+            }
+        }
+    }
+
+    @Override
+    public void onErrorResponse(String error) {
+
+    }
 
 
     public class ShoppingItemAdapter
             extends RecyclerView.Adapter<ShoppingItemAdapter.ViewHolder> {
 
-        String [] shopping_item_name;
+
+        ModelBrands brands;
 
 
 
@@ -178,9 +248,9 @@ public class FragmentFashion extends Fragment implements BaseSliderView.OnSlider
         }
 
 
-        public ShoppingItemAdapter(Context context, String [] shopping_item_name) {
+        public ShoppingItemAdapter(Context context, ModelBrands brands) {
 
-            this.shopping_item_name = shopping_item_name;
+            this.brands = brands;
 
         }
 
@@ -217,13 +287,45 @@ public class FragmentFashion extends Fragment implements BaseSliderView.OnSlider
 
 
 
+            int rand=  R.color.dining_color;
+
+            Random randomGenerator = new Random();
+
+            int randomInt = randomGenerator.nextInt(5);
+
+
+            if (randomInt == 0)
+            {
+                rand=  R.color.shopping_color;
+            }
+            else if(randomInt == 1)
+            {
+                rand=  R.color.dining_color;
+            }
+            else if(randomInt == 2)
+            {
+                rand=  R.color.deals_color;
+            }
+            else if(randomInt == 3)
+            {
+                rand=  R.color.entertainment_color;
+            }
+            else if(randomInt == 4)
+            {
+                rand=  R.color.more_color;
+            }
+
+
+
 
 
 
             Picasso.with(getActivity())
-                    .load(brand_image_urls[position])
+                    .load(brands.getBrands()[position].getImage())
                     .resize(getView().getWidth(),getView().getHeight())
                     .onlyScaleDown()
+                    .placeholder(rand)
+                    .error(rand)
                     .into(holder.IV_shopping_item_image);
 
 
@@ -233,10 +335,17 @@ public class FragmentFashion extends Fragment implements BaseSliderView.OnSlider
                 @Override
                 public void onClick(View v) {
 
+                    getActivity().findViewById(R.id.ll_menu_shopping).setVisibility(View.GONE);
+                    getActivity().findViewById(R.id.ll_menu_more).setVisibility(View.GONE);
+
+
+
+                    bundle_fashion.putString("brandid", brands.getBrands()[position].getBrand_id());
+                    fragmentDetail.setArguments(bundle_fashion);
 
                     // calling detail fragment here
-
-                    ((ActivityHome)getActivity()).replaceFragment(new FragmentDetail());
+                    getActivity(). getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentDetail).addToBackStack("Fashion").commit();
+                    //replaceFragment(fragmentDetail);
 
                 }
             });
@@ -251,7 +360,7 @@ public class FragmentFashion extends Fragment implements BaseSliderView.OnSlider
 
         @Override
         public int getItemCount() {
-            return brand_image_urls.length;
+            return brands.getBrands().length;
         }
 
 
@@ -259,6 +368,51 @@ public class FragmentFashion extends Fragment implements BaseSliderView.OnSlider
 
 
 
+    }
+
+
+    public void  setSliders(ModelFashion fashion){
+        for(int i=0;i<fashion.banner_slider.length;i++){
+            url_maps.put("fashion"+i,fashion.banner_slider[i]);
+        }
+
+        for(String name : url_maps.keySet()){
+            TextSliderView textSliderView = new TextSliderView(getActivity());
+            // initialize a SliderLayout
+            textSliderView
+                    .description(name)
+                    .image(url_maps.get(name))
+                    .setScaleType(BaseSliderView.ScaleType.Fit)
+                    .setOnSliderClickListener(this);
+
+            //add your extra information
+            textSliderView.bundle(new Bundle());
+            textSliderView.getBundle()
+                    .putString("extra",name);
+
+            mShoppingSlider.addSlider(textSliderView);
+        }
+        mShoppingSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
+        mShoppingSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        mShoppingSlider.setCustomAnimation(new Adanimation());
+        mShoppingSlider.setDuration(4000);
+        mShoppingSlider.addOnPageChangeListener(this);
+
+
+    }
+
+    @Override
+    public void onDestroy() {
+
+        mShoppingSlider.stopAutoCycle();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onResume() {
+
+        mShoppingSlider.startAutoCycle();
+        super.onResume();
     }
 
 

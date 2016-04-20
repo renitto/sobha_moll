@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#FFFFFF</color>
 
 
     <color name="light_pink">#DA4968</color>
@@ -24,12 +24,25 @@
     <color name="deals_color">#70BF54</color>
     <color name="more_color">#3B94D0</color>
 
+
+    <color name="movie_time_text">#444444</color>
+    <color name="movie_time_bg">#5E5E5E</color>
+
+
+
+
     <array name="category_colors">
-        <item>@color/light_pink</item>
-        <item>@color/dark_orange</item>
-        <item>@color/light_yellow</item>
-        <item>@color/light_green</item>
+        <item>@color/shopping_color</item>
+        <item>@color/dining_color</item>
+        <item>@color/entertainment_color</item>
+        <item>@color/deals_color</item>
+        <item>@color/more_color</item>
 
     </array>
+
+
+
+
+
 
 </resources>
