@@ -1,8 +1,12 @@
 package com.example.renitto.scmapp.Presenter;
 
+import android.Manifest;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
@@ -17,9 +21,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,16 +36,21 @@ import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.example.renitto.scmapp.Application;
+import com.example.renitto.scmapp.DAL.DbManager;
 import com.example.renitto.scmapp.DAL.NetworkManager;
 import com.example.renitto.scmapp.Model.ModelEntertainmentBrand;
 import com.example.renitto.scmapp.R;
 import com.example.renitto.scmapp.Utils.Adanimation;
 import com.example.renitto.scmapp.Utils.ConnectionDetector;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Created by Renitto on 3/11/2016.
@@ -56,6 +67,11 @@ public class FragmentEntertainment extends Fragment implements NetworkManager.on
 
 
     String [] UpcomingMovies;
+    DbManager dbManager;
+
+    UpcomingMoviesNonMoveAdapter upcomingMoviesNonMoveAdapter;
+
+
 
 
     LinearLayoutManager layoutManager;
@@ -88,6 +104,10 @@ public class FragmentEntertainment extends Fragment implements NetworkManager.on
                 container, false);
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        // setting navigation drawer
+
+        ((ActivityHome)getActivity()).setNavigationDrawerSelected(3);
+
         ViewPager viewPager = (ViewPager)view.findViewById(R.id.entertainment_viewpager);
         if (viewPager != null) {
             setupViewPager(viewPager);
@@ -102,6 +122,16 @@ public class FragmentEntertainment extends Fragment implements NetworkManager.on
         TV_entertainment_open_hours = (TextView)view.findViewById(R.id.tv_entertainment_open_hours);
 
 
+
+
+        getActivity().findViewById(R.id.ll_menu_shopping).setVisibility(View.GONE);
+        getActivity().findViewById(R.id.ll_menu_more).setVisibility(View.GONE);
+
+        getActivity().findViewById(R.id.rl_menu_shopping).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+        getActivity().findViewById(R.id.rl_menu_dining).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+        getActivity().findViewById(R.id.rl_menu_entertainment).setBackgroundColor(getResources().getColor(R.color.entertainment_color)); // changing other to black
+        getActivity().findViewById(R.id.rl_menu_deals).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+        getActivity().findViewById(R.id.rl_menu_more).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
 
 
 
@@ -121,13 +151,37 @@ public class FragmentEntertainment extends Fragment implements NetworkManager.on
         url_maps = new HashMap<String, String>();
 
 
+
+
+
+        // movie detail recycler
+
         upcomingmovie_list = (RecyclerView)view.findViewById(R.id.recycler_upcoming_movies);
-         layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        layoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
+        upcomingmovie_list.setLayoutManager(layoutManager);
 
 
 
-        setEntertainmentData();
+
+
+
+        if (entertainmentBrand == null  )
+            entertainmentBrand = dbManager.getEntertainment(getActivity());
+
+        if(entertainmentBrand!=null) {
+            if (entertainmentBrand.offers == null )
+                entertainmentBrand.offers = dbManager.getEntertainmentOfferSlider(getActivity());
+            if (entertainmentBrand.upcoming == null )
+                entertainmentBrand.upcoming = dbManager.getUpcomingMovies(getActivity());
+            setEntertainmentData();
+        }
+
+
+
+
+
+
+
 
 
 
@@ -136,13 +190,46 @@ public class FragmentEntertainment extends Fragment implements NetworkManager.on
             @Override
             public void onClick(View v) {
 
-                if (TV_entertainment_mobileno.getText() != null && !TV_entertainment_mobileno.getText().toString().equals(""))
-                {
-                    // calling to that number
-                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:+"+TV_entertainment_mobileno.getText().toString()));
-                    startActivity(callIntent );
-                }
+
+                // setting permissions
+                PermissionListener permissionlistener = new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted() {
+
+                        if (TV_entertainment_mobileno.getText() != null && !TV_entertainment_mobileno.getText().toString().equals(""))
+                        {
+                            // calling to that number
+                            Intent callIntent = new Intent(Intent.ACTION_CALL);
+                            callIntent.setData(Uri.parse("tel:+"+TV_entertainment_mobileno.getText().toString()));
+                            startActivity(callIntent );
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                        Toast.makeText(getActivity(), "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+                    }
+
+
+                };
+
+
+                new TedPermission(getActivity())
+                        .setPermissionListener(permissionlistener)
+                        .setRationaleMessage("we need permission to Call from Phone")
+                        .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+                        .setPermissions(Manifest.permission.CALL_PHONE)
+                        .check();
+
+
+
+
+
+
+
+
             }
         });
 
@@ -150,13 +237,45 @@ public class FragmentEntertainment extends Fragment implements NetworkManager.on
             @Override
             public void onClick(View v) {
 
-                if (TV_entertainment_emailid.getText() != null && !TV_entertainment_emailid.getText().toString().equals(""))
-                {
-                    Intent intent = new Intent (Intent.ACTION_VIEW , Uri.parse("mailto:" + TV_entertainment_emailid.getText()));
-                    intent.putExtra(Intent.EXTRA_SUBJECT, "");
-                    intent.putExtra(Intent.EXTRA_TEXT, "");
-                    startActivity(intent);
-                }
+
+
+                // setting permissions
+                PermissionListener permissionlistener = new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted() {
+
+                        if (TV_entertainment_emailid.getText() != null && !TV_entertainment_emailid.getText().toString().equals(""))
+                        {
+                            Intent intent = new Intent (Intent.ACTION_VIEW , Uri.parse("mailto:" + TV_entertainment_emailid.getText()));
+                            intent.putExtra(Intent.EXTRA_SUBJECT, "");
+                            intent.putExtra(Intent.EXTRA_TEXT, "");
+                            startActivity(intent);
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                        Toast.makeText(getActivity(), "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+                    }
+
+
+                };
+
+
+                new TedPermission(getActivity())
+                        .setPermissionListener(permissionlistener)
+                        .setRationaleMessage("we need permission to read your contact")
+                        .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+                        .setPermissions(Manifest.permission.READ_CONTACTS)
+                        .check();
+
+
+
+
+
+
             }
         });
 
@@ -183,7 +302,34 @@ public class FragmentEntertainment extends Fragment implements NetworkManager.on
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        NetworkManager.GetDataFromServer(this, NetworkManager.GET_ENTERTAINMENT_BRAND_CONTENTS, getActivity(), null);
+
+        dbManager =  new DbManager();
+
+        if(new ConnectionDetector(getActivity()).isConnectingToInternet()) {
+            NetworkManager.GetDataFromServer(this, NetworkManager.GET_ENTERTAINMENT_BRAND_CONTENTS, getActivity(), null);
+        }
+        else {
+            entertainmentBrand = dbManager.getEntertainment(getActivity());
+
+
+            if(entertainmentBrand == null )
+            {
+
+                Toast.makeText(getActivity(),"Please check your internet connection and try again !",Toast.LENGTH_LONG).show();
+            }
+            else
+            {
+                entertainmentBrand.offers = dbManager.getEntertainmentOfferSlider(getActivity());
+                if(entertainmentBrand.offers!=null)
+                    Toast.makeText(getActivity(),"Please check your internet connection and try again !",Toast.LENGTH_LONG).show();
+                entertainmentBrand.upcoming = dbManager.getUpcomingMovies(getActivity());
+                if(entertainmentBrand.upcoming==null)
+                    Toast.makeText(getActivity(),"Please check your internet connection and try again !",Toast.LENGTH_LONG).show();
+
+            }
+
+        }
+
 
     }
 
@@ -209,8 +355,10 @@ public class FragmentEntertainment extends Fragment implements NetworkManager.on
     public void showData(Object data, int whatToShow) {
         if (data != null)
         {
-        entertainmentBrand = (ModelEntertainmentBrand) data;
-
+            entertainmentBrand = (ModelEntertainmentBrand) data;
+            dbManager.insertEntertainment(getActivity(),entertainmentBrand);
+            dbManager.insertEntertainmentOfferSlider(getActivity(),entertainmentBrand.offers);
+            dbManager.insertUpcomingMovies(getActivity(),entertainmentBrand.upcoming);
             setEntertainmentData();
 
         }
@@ -220,7 +368,7 @@ public class FragmentEntertainment extends Fragment implements NetworkManager.on
     {
 
 
-        if (entertainmentBrand != null) {
+        if (entertainmentBrand.offers != null) {
             setSliders(entertainmentBrand);
             //setting home banner here
             Picasso.with(getActivity())
@@ -241,56 +389,62 @@ public class FragmentEntertainment extends Fragment implements NetworkManager.on
             TV_entertainment_web_address.setText(entertainmentBrand.getWebsite());
 
 
-            UpcomingMovies = entertainmentBrand.getUpcoming();
+            UpcomingMovies = entertainmentBrand.upcoming;
 
 
-            upcomingmovie_list.setLayoutManager(layoutManager);
-            upcomingmovie_list.setAdapter(new UpcomingMoviesAdapter());
+            if (UpcomingMovies != null) {
+                 upcomingMoviesNonMoveAdapter = new UpcomingMoviesNonMoveAdapter(getActivity(), UpcomingMovies);
+                upcomingmovie_list.setAdapter(upcomingMoviesNonMoveAdapter);
+            }
 
 
-            // marquee effect for the upcoming movie list
-
-            upcomingmovie_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    totalMovedPixel = totalMovedPixel + dx;
-                    visibleItemCount = layoutManager.getChildCount();
-                    totalItemCount = layoutManager.getItemCount();
-                    pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-                    if (foundTotalPixel) {
-                        if (totalItemCount > 2) {
-                            View headerView = layoutManager.getChildAt(0);
-                            View itemView = layoutManager.getChildAt(1);
-
-                            if (itemView != null && headerView != null) {
-                        /*total visible scrolling part is total pixel's of total item's count and header view*/
-                                totalPixel = /*-c.getTop() +*/ ((totalItemCount - 2) * itemView.getWidth()) + (1 * headerView.getWidth());
-                                Log.v("...", "Total pixel x!" + totalPixel);
-                                foundTotalPixel = false;
-                            }
-                        }
-                    }
-
-                    //if (loading) {
-                    //if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                    if (!foundTotalPixel && totalMovedPixel >= totalPixel) {
-                        // loading = false;
-                        Log.v("...", "Last Item Wow !");
-                        Log.v("...", "totalMovedPixel !" + totalMovedPixel);
-
-                        // use this to turn auto-scrolling off:
-                        //mHandler.removeCallbacks(SCROLLING_RUNNABLE);
-                        upcomingmovie_list.setAdapter(null);
-                        upcomingmovie_list.setAdapter(new UpcomingMoviesAdapter());
-                        pastVisiblesItems = visibleItemCount = totalItemCount = 0;
-                        totalMovedPixel = 0;
-
-                    }
-                }
-                // }
-            });
-            // use this to turn auto-scrolling on:
-            mHandler.post(SCROLLING_RUNNABLE);
+//            upcomingmovie_list.setLayoutManager(layoutManager);
+//            upcomingmovie_list.setAdapter(new UpcomingMoviesAdapter());
+//
+//
+//            // marquee effect for the upcoming movie list
+//
+//            upcomingmovie_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//                @Override
+//                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                    totalMovedPixel = totalMovedPixel + dx;
+//                    visibleItemCount = layoutManager.getChildCount();
+//                    totalItemCount = layoutManager.getItemCount();
+//                    pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+//                    if (foundTotalPixel) {
+//                        if (totalItemCount > 2) {
+//                            View headerView = layoutManager.getChildAt(0);
+//                            View itemView = layoutManager.getChildAt(1);
+//
+//                            if (itemView != null && headerView != null) {
+//                        /*total visible scrolling part is total pixel's of total item's count and header view*/
+//                                totalPixel = /*-c.getTop() +*/ ((totalItemCount - 2) * itemView.getWidth()) + (1 * headerView.getWidth());
+//                                Log.v("...", "Total pixel x!" + totalPixel);
+//                                foundTotalPixel = false;
+//                            }
+//                        }
+//                    }
+//
+//                    //if (loading) {
+//                    //if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+//                    if (!foundTotalPixel && totalMovedPixel >= totalPixel) {
+//                        // loading = false;
+//                        Log.v("...", "Last Item Wow !");
+//                        Log.v("...", "totalMovedPixel !" + totalMovedPixel);
+//
+//                        // use this to turn auto-scrolling off:
+//                        //mHandler.removeCallbacks(SCROLLING_RUNNABLE);
+//                        upcomingmovie_list.setAdapter(null);
+//                        upcomingmovie_list.setAdapter(new UpcomingMoviesAdapter());
+//                        pastVisiblesItems = visibleItemCount = totalItemCount = 0;
+//                        totalMovedPixel = 0;
+//
+//                    }
+//                }
+//                // }
+//            });
+//            // use this to turn auto-scrolling on:
+//            mHandler.post(SCROLLING_RUNNABLE);
 
         }
 
@@ -428,11 +582,27 @@ public class FragmentEntertainment extends Fragment implements NetworkManager.on
         public void onBindViewHolder(final ViewHolder holder, final int position) {
 
 
-            Picasso.with(getActivity())
-                    .load(UpcomingMovies[position])
-                    .resize(getView().getWidth(),getView().getHeight())
-                    .onlyScaleDown()
-                    .into(holder.IV_upcoming_movie_image);
+
+            ViewTreeObserver vto = holder.IV_upcoming_movie_image.getViewTreeObserver();
+            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                public boolean onPreDraw() {
+                    holder.IV_upcoming_movie_image.getViewTreeObserver().removeOnPreDrawListener(this);
+                    int   logo_height = holder.IV_upcoming_movie_image.getMeasuredHeight();
+                    int   logo_width = holder.IV_upcoming_movie_image.getMeasuredWidth();
+                    Picasso.with(getActivity())
+                            .load(UpcomingMovies[position])
+                            .placeholder(R.drawable.preview)
+                            .error(R.drawable.preview)
+                            .resize(logo_width,logo_height)
+                            .onlyScaleDown()
+                            .into(holder.IV_upcoming_movie_image);
+
+
+                    return true;
+                }
+            });
+
+
 
 
 
@@ -530,6 +700,124 @@ public class FragmentEntertainment extends Fragment implements NetworkManager.on
 
 
     }
+
+
+
+    public class UpcomingMoviesNonMoveAdapter
+            extends RecyclerView.Adapter<UpcomingMoviesNonMoveAdapter.ViewHolder> {
+
+        String [] UpcomingMoviesNonMove;
+
+
+
+        //type 1 viewholder
+        public class ViewHolder extends RecyclerView.ViewHolder {
+
+            public final View mView;
+
+
+            public final ImageView IV_upcoming_movie;
+
+
+
+
+
+
+
+
+            public ViewHolder(View view) {
+                super(view);
+                mView = view;
+
+
+                IV_upcoming_movie = (ImageView) view.findViewById(R.id.iv_upcoming_movie_static);
+
+
+
+
+
+
+
+
+            }
+
+
+        }
+
+
+        public UpcomingMoviesNonMoveAdapter(Context context, String[] UpcomingMoviesNonMove) {
+
+            this.UpcomingMoviesNonMove = UpcomingMoviesNonMove;
+
+        }
+
+
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view =LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.upcoming_movie_card_static, parent, false);
+
+
+
+
+            return new ViewHolder(view);
+
+
+        }
+
+
+
+        @Override
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
+
+
+
+
+            ViewTreeObserver vto = holder.IV_upcoming_movie.getViewTreeObserver();
+            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                public boolean onPreDraw() {
+                    holder.IV_upcoming_movie.getViewTreeObserver().removeOnPreDrawListener(this);
+                    int   logo_height = holder.IV_upcoming_movie.getMeasuredHeight();
+                    int   logo_width = holder.IV_upcoming_movie.getMeasuredWidth();
+                    Picasso.with(getActivity())
+                            .load(UpcomingMoviesNonMove[position])
+                            .placeholder(R.drawable.preview)
+                            .error(R.drawable.preview)
+                            .resize(logo_width,logo_height)
+                            .onlyScaleDown()
+                            .into(holder.IV_upcoming_movie);
+
+
+
+                    return true;
+                }
+            });
+
+
+
+
+
+
+
+
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return UpcomingMoviesNonMove.length;
+        }
+
+
+
+
+
+
+    }
+
+
 
 
     @Override

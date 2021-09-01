@@ -7,9 +7,11 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -61,42 +63,57 @@ public class FragmentMovieDetailDialog extends DialogFragment implements Seriali
         LL_movie_detail = (LinearLayout)view.findViewById(R.id.ll_movie_data);
 
 
-        TV_movie_name.setText(getArguments().getString("title"));
-        TV_movie_synopsis.setText(getArguments().getString("synopsis"));
+
+                  return view;
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        TV_movie_name.setText(Html.fromHtml(getArguments().getString("title")));
+        TV_movie_synopsis.setText(Html.fromHtml(getArguments().getString("synopsis")));
         TV_director.setText(getArguments().getString("director"));
         TV_cast.setText(getArguments().getString("cast"));
         TV_genere.setText(getArguments().getString("genre"));
 
 
-       Picasso.with(getActivity()).load(getArguments().getString("image"))
-//               .resize(getView().getMeasuredWidth(),getView().getMeasuredHeight())
-//               .onlyScaleDown()
-               .into(IV_movie_image, new Callback() {
-           @Override
-           public void onSuccess() {
+        Picasso.with(getActivity()).load(getArguments().getString("image"))
+//                .resize(logo_width,logo_height)
+//                .onlyScaleDown()
+                .into(IV_movie_image, new Callback() {
+                    @Override
+                    public void onSuccess() {
 
 
-               Bitmap photo = ((BitmapDrawable)IV_movie_image.getDrawable()).getBitmap();
-               // do your processing here....
-               Palette.generateAsync(photo, new Palette.PaletteAsyncListener() {
-                   public void onGenerated(Palette palette) {
-                       int mutedLight = palette.getDarkVibrantColor(getActivity().getResources().getColor(android.R.color.black));
+                        Bitmap photo = ((BitmapDrawable)IV_movie_image.getDrawable()).getBitmap();
+                        // do your processing here....
+                        Palette.generateAsync(photo, new Palette.PaletteAsyncListener() {
+                            public void onGenerated(Palette palette) {
+                                int mutedLight = palette.getDarkVibrantColor(getActivity().getResources().getColor(android.R.color.black));
 
-                       LL_movie_detail.setBackgroundColor(mutedLight);
+                                LL_movie_detail.setBackgroundColor(mutedLight);
 
-                   }
-               });
+                            }
+                        });
 
 
-           }
+                    }
 
-           @Override
-           public void onError() {
+                    @Override
+                    public void onError() {
 
-           }
-       });
+                    }
+                });
 
-                  return view;
+
+
+
+
+
+
+
     }
 
     @Override

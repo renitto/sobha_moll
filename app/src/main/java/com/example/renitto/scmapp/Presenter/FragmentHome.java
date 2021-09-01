@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,6 +22,8 @@ import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.example.renitto.scmapp.Application;
+import com.example.renitto.scmapp.DAL.DbManager;
 import com.example.renitto.scmapp.DAL.NetworkManager;
 import com.example.renitto.scmapp.Model.ModelHomeContent;
 import com.example.renitto.scmapp.R;
@@ -44,8 +47,14 @@ public class FragmentHome extends Fragment implements BaseSliderView.OnSliderCli
     Typeface font;
 
     TextView tv_whats_happening;
+    ModelHomeContent myHomeContent;
+    CategoryItemAdapter categoryItemAdapter;
+    DbManager dbManager;
 
     public void  setSliders(ModelHomeContent homeContent){
+        if(homeContent==null)
+            return;
+        myHomeContent=homeContent;
         for(int i=0;i<homeContent.banner_slider.length;i++){
             url_maps.put(homeContent.banner_slider[i].title,homeContent.banner_slider[i].image);
         }
@@ -80,6 +89,12 @@ public class FragmentHome extends Fragment implements BaseSliderView.OnSliderCli
          category_image_urls[1] = homeContent.tile_images.getDining();
          category_image_urls[2] = homeContent.tile_images.getEntertainment();
          category_image_urls[3] = homeContent.tile_images.getOffers();
+
+
+        categoryItemAdapter = new CategoryItemAdapter(getActivity(), category_names);
+        RV_Category.setAdapter(categoryItemAdapter);
+
+
     }
 
 
@@ -90,7 +105,7 @@ public class FragmentHome extends Fragment implements BaseSliderView.OnSliderCli
     RecyclerView.LayoutManager mLayoutManager;
     SliderLayout mHomeSlider;
     ImageView IV_home_Banner;  HashMap<String,String> url_maps;
-    String [] category_names = {"SHOPPING", "DINING", "ENTERTAINMENT","DEALS"};
+    String [] category_names = {"SHOPPING", "DINING", "ENTERTAINMENT","OFFERS"};
 
 
     String[] category_image_urls = new String[4] ;
@@ -107,9 +122,25 @@ public class FragmentHome extends Fragment implements BaseSliderView.OnSliderCli
                 container, false);
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        // setting navigation drawer
+
+        ((ActivityHome)getActivity()).setNavigationDrawerSelected(0);
+
+
         IV_home_Banner = (ImageView)view.findViewById(R.id.iv_home_banner);
 
         tv_whats_happening = (TextView)view.findViewById(R.id.whts_happening);
+
+
+
+        getActivity().findViewById(R.id.ll_menu_shopping).setVisibility(View.GONE);
+        getActivity().findViewById(R.id.ll_menu_more).setVisibility(View.GONE);
+
+        getActivity().findViewById(R.id.rl_menu_shopping).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+        getActivity().findViewById(R.id.rl_menu_dining).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+        getActivity().findViewById(R.id.rl_menu_entertainment).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+        getActivity().findViewById(R.id.rl_menu_deals).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+        getActivity().findViewById(R.id.rl_menu_more).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
 
 
         font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Titillium.otf");
@@ -130,24 +161,40 @@ public class FragmentHome extends Fragment implements BaseSliderView.OnSliderCli
         isInternetPresent = cd.isConnectingToInternet();
 
 
-        if (isInternetPresent)
-        NetworkManager.GetDataFromServer(this,NetworkManager.GET_HOME_CONTENTS,getActivity(),null);
-        else
-            Toast.makeText(getActivity(),"Please check your internet connection and try again !",Toast.LENGTH_LONG).show();
-
 
         // home slider end
         RV_Category = (RecyclerView)view.findViewById(R.id.recycler_home_category);
         mLayoutManager = new LinearLayoutManager(getActivity());
         RV_Category.setLayoutManager(mLayoutManager);
         categorycolors = this.getResources().getIntArray(R.array.category_colors);
-        CategoryItemAdapter categoryItemAdapter = new CategoryItemAdapter(getActivity(), category_names);
-        RV_Category.setAdapter(categoryItemAdapter);
 
 
 
-
+        if(myHomeContent ==null )
+            myHomeContent=dbManager.getHomeContent(getActivity());
+        if(myHomeContent !=null )
+            setSliders(myHomeContent);
         return view;
+
+    }
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        dbManager = new DbManager();
+        if(new ConnectionDetector(getActivity()).isConnectingToInternet()) {
+            NetworkManager.GetDataFromServer(this, NetworkManager.GET_HOME_CONTENTS, getActivity(), null);
+        }
+        else {
+            myHomeContent=dbManager.getHomeContent(getActivity());
+            if(myHomeContent == null )
+            {
+
+                Toast.makeText(getActivity(),"Please check your internet connection and try again !",Toast.LENGTH_SHORT).show();
+            }
+        }
+
 
     }
 
@@ -161,13 +208,29 @@ public class FragmentHome extends Fragment implements BaseSliderView.OnSliderCli
     @Override
     public void onSliderClick(BaseSliderView slider) {
 
-//        FragmentHome home = new FragmentHome();
-//        FragmentWhatHappening whatHappening = new FragmentWhatHappening();
-//        Bundle args = new Bundle();
-//        args.putString("img",movieDetails.getAvailable()[position].getSynopsis() );
-//        whatHappening.setArguments(args);
-//        whatHappening.setTargetFragment(home , 0);
-//        whatHappening.show(getActivity().getFragmentManager(), "WhatHappeningDialogFragment");
+
+
+        for (int ev1 = 0; ev1 < myHomeContent.banner_slider.length; ev1++)
+        {
+            if ((slider.getBundle().get("extra")).equals(myHomeContent.banner_slider[ev1].title)) {
+
+                FragmentHome home = new FragmentHome();
+                FragmentHomeSliderDetail fragmentHomeSliderDetail = new FragmentHomeSliderDetail();
+                Bundle args = new Bundle();
+                args.putString("title",myHomeContent.banner_slider[ev1].title);
+                args.putString("id",String.valueOf(myHomeContent.banner_slider[ev1].page_id));
+                args.putString("image",myHomeContent.banner_slider[ev1].image);
+
+                fragmentHomeSliderDetail.setArguments(args);
+                fragmentHomeSliderDetail.setTargetFragment(home , 0);
+                fragmentHomeSliderDetail.show(getActivity().getFragmentManager(), "homesliderdesc");
+
+
+            }
+        }
+
+
+
 
     }
 
@@ -285,20 +348,34 @@ public class FragmentHome extends Fragment implements BaseSliderView.OnSliderCli
 
 
 
-//            Typeface tf = Typeface.createFromAsset(getActivity().getAssets(),"fonts/Aller_Rg.ttf");
-//            holder.TV_deal_name.setTypeface(tf, Typeface.NORMAL);
+
 
 
             holder.RV_home_category.setBackgroundColor(categorycolors[position]);
 
 
+            ViewTreeObserver vto = holder.IV_category_image.getViewTreeObserver();
+            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                public boolean onPreDraw() {
+                    holder.IV_category_image.getViewTreeObserver().removeOnPreDrawListener(this);
+                    int   logo_height = holder.IV_category_image.getMeasuredHeight();
+                    int   logo_width = holder.IV_category_image.getMeasuredWidth();
+                    Picasso.with(getActivity()).load(category_image_urls[position])
+                            .placeholder(R.drawable.preview_movie_im)
+                            .error(R.drawable.preview_movie_im)
+                            .resize(logo_width,logo_height)
+                            .onlyScaleDown()
+                            .into(holder.IV_category_image);
 
-            Picasso.with(getActivity()).load(category_image_urls[position])
-//                    .placeholder(R.color.black)
-//                    .error(R.color.colorPrimary)
-                    .resize(getView().getWidth(),getView().getHeight())
-                    .onlyScaleDown()
-                    .into(holder.IV_category_image);
+
+
+                    return true;
+                }
+            });
+
+
+
+
 
 
 
@@ -309,40 +386,17 @@ public class FragmentHome extends Fragment implements BaseSliderView.OnSliderCli
 
                     if (category_name[position].equals("SHOPPING"))
                     {
-//                        Bundle bundle_shopping=new Bundle();
-//                        bundle_shopping.putString("fromhome", "Fashion");
 
-                        getActivity().findViewById(R.id.ll_menu_shopping).setVisibility(View.GONE);
-                        getActivity().findViewById(R.id.ll_menu_more).setVisibility(View.GONE);
-
-                        getActivity().findViewById(R.id.rl_menu_shopping).setBackgroundColor(getResources().getColor(R.color.shopping_color)); // changing other to black
-                        getActivity().findViewById(R.id.rl_menu_dining).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
-                        getActivity().findViewById(R.id.rl_menu_entertainment).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
-                        getActivity().findViewById(R.id.rl_menu_deals).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
-                        getActivity().findViewById(R.id.rl_menu_more).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
-
-                        //calling shopping fragment
-
-//                        Fragment_shopping fragment_shopping= new Fragment_shopping();
-                        //calling fashion fragment
-
-//                        fragment_shopping.setArguments(bundle_shopping);
 
                         replaceFragment(new Fragment_shopping());
 
                     }
                     else  if (category_name[position].equals("DINING"))
                     {
-                        getActivity().findViewById(R.id.ll_menu_shopping).setVisibility(View.GONE);
-                        getActivity().findViewById(R.id.ll_menu_more).setVisibility(View.GONE);
 
-                        getActivity().findViewById(R.id.rl_menu_shopping).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
-                        getActivity().findViewById(R.id.rl_menu_dining).setBackgroundColor(getResources().getColor(R.color.dining_color)); // changing other to black
-                        getActivity().findViewById(R.id.rl_menu_entertainment).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
-                        getActivity().findViewById(R.id.rl_menu_deals).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
-                        getActivity().findViewById(R.id.rl_menu_more).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
 
                         //calling dining fragment
+
 
                        replaceFragment(new FragmentDining());
 
@@ -352,31 +406,18 @@ public class FragmentHome extends Fragment implements BaseSliderView.OnSliderCli
 
 
 
-                        getActivity().findViewById(R.id.ll_menu_shopping).setVisibility(View.GONE);
-                        getActivity().findViewById(R.id.ll_menu_more).setVisibility(View.GONE);
-
-                        getActivity().findViewById(R.id.rl_menu_shopping).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
-                        getActivity().findViewById(R.id.rl_menu_dining).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
-                        getActivity().findViewById(R.id.rl_menu_entertainment).setBackgroundColor(getResources().getColor(R.color.entertainment_color)); // changing other to black
-                        getActivity().findViewById(R.id.rl_menu_deals).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
-                        getActivity().findViewById(R.id.rl_menu_more).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
 
                         //calling entertainment fragment
 
-                        replaceFragment(new FragmentMollywood());
-                    }
-                    else  if (category_name[position].equals("DEALS"))
-                    {
-                        getActivity().findViewById(R.id.ll_menu_shopping).setVisibility(View.GONE);
-                        getActivity().findViewById(R.id.ll_menu_more).setVisibility(View.GONE);
 
-                        getActivity().findViewById(R.id.rl_menu_shopping).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
-                        getActivity().findViewById(R.id.rl_menu_dining).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
-                        getActivity().findViewById(R.id.rl_menu_entertainment).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
-                        getActivity().findViewById(R.id.rl_menu_deals).setBackgroundColor(getResources().getColor(R.color.deals_color)); // changing other to black
-                        getActivity().findViewById(R.id.rl_menu_more).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+                        replaceFragment(new FragmentEntertainment());
+                    }
+                    else  if (category_name[position].equals("OFFERS"))
+                    {
+
 
                         //calling deals fragment
+
 
                         replaceFragment(new FragmentOffers());
 

@@ -7,13 +7,13 @@ android {
     defaultConfig {
         applicationId "com.example.renitto.scmapp"
         minSdkVersion 15
-        targetSdkVersion 23
+        targetSdkVersion 20
         versionCode 1
         versionName "1.0"
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt')
         }
@@ -21,6 +21,12 @@ android {
             debuggable true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt')
+        }
+    }
+
+    repositories {
+        maven {
+            url "https://mint.splunk.com/gradle/"
         }
     }
 }
@@ -46,4 +52,7 @@ dependencies {
     compile project(':tedpermission')
     compile 'com.github.florent37:viewanimator:1.0.3@aar'
     compile 'com.android.support:palette-v7:23.0.0'
+
+    compile "com.splunk.mint:mint:5.0.0"
+
 }

@@ -12,11 +12,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,6 +30,8 @@ import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.example.renitto.scmapp.Application;
+import com.example.renitto.scmapp.DAL.DbManager;
 import com.example.renitto.scmapp.DAL.NetworkManager;
 import com.example.renitto.scmapp.Model.ModelMovieDetails;
 import com.example.renitto.scmapp.R;
@@ -77,7 +81,22 @@ public class FragmentMollywood extends  Fragment implements   NetworkManager.onS
         RV_movie_details.setLayoutManager(moviedetailLayoutManager);
 
 
-         setEntertainmentDetails();
+         params[0] = getArguments().getString("id");
+         if(new ConnectionDetector(getActivity()).isConnectingToInternet()) {
+             NetworkManager.GetDataFromServer(this, NetworkManager.GET_MOVIE_DETAIL_CONTENTS, getActivity(), params);
+         }
+         else {
+             if(Application.getInstance().movieDetails == null )
+             {
+
+                 Toast.makeText(getActivity(),"Please connect to internet for latest movie updates !",Toast.LENGTH_SHORT).show();
+             }
+             else
+             {
+                 movieDetails = Application.getInstance().movieDetails;
+                 setEntertainmentDetails();
+             }
+         }
 
 
 
@@ -90,8 +109,7 @@ public class FragmentMollywood extends  Fragment implements   NetworkManager.onS
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        params[0] = getArguments().getString("id");
-        NetworkManager.GetDataFromServer(this,NetworkManager.GET_MOVIE_DETAIL_CONTENTS,getActivity(),params);
+
 
     }
 
@@ -100,7 +118,10 @@ public void showData(Object data, int whatToShow) {
 
         if (data!= null)
         {
-        movieDetails = (ModelMovieDetails) data;
+            movieDetails = (ModelMovieDetails) data;
+            Application.getInstance().movieDetails = movieDetails;
+//            for(int i =0;i<movieDetails.getAvailable().length;i++)
+//            new DbManager().insertMovieDetails(getActivity(),movieDetails.getAvailable()[i],getArguments().getString("id"));
 
             setEntertainmentDetails();
 
@@ -219,19 +240,13 @@ public class MovieShowDetailsAdapter
 
 
 
-        holder.TV_movie_name.setText(movieDetails.getAvailable()[position].getTitle());
-        holder.TV_movie_synopsis.setText(movieDetails.getAvailable()[position].getSynopsis());
+        holder.TV_movie_name.setText(Html.fromHtml(movieDetails.getAvailable()[position].getTitle()));
+//        holder.TV_movie_synopsis.setText(movieDetails.getAvailable()[position].getSynopsis());
 
         holder.TV_movie_synopsis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                FragmentMollywood mollywood = new FragmentMollywood();
-//                FragmentDescription description = new FragmentDescription();
-//                Bundle args = new Bundle();
-//                args.putString("detail",movieDetails.getAvailable()[position].getSynopsis() );
-//                description.setArguments(args);
-//                description.setTargetFragment(mollywood , 0);
-//                description.show(getActivity().getFragmentManager(), "moviedescription");
+
 
                 FragmentMollywood mollywood = new FragmentMollywood();
                 FragmentMovieDetailDialog fragmentDescription = new FragmentMovieDetailDialog();
@@ -249,11 +264,30 @@ public class MovieShowDetailsAdapter
 
             }
         });
-        Picasso.with(getActivity())
-                .load(movieDetails.getAvailable()[position].getImage())
-                .resize(getView().getWidth(),getView().getHeight())
-                .onlyScaleDown()
-                .into(holder.IV_movie);
+
+
+        ViewTreeObserver vto = holder.IV_movie.getViewTreeObserver();
+        vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            public boolean onPreDraw() {
+                holder.IV_movie.getViewTreeObserver().removeOnPreDrawListener(this);
+                int   logo_height = holder.IV_movie.getMeasuredHeight();
+                int   logo_width = holder.IV_movie.getMeasuredWidth();
+                Picasso.with(getActivity())
+                        .load(movieDetails.getAvailable()[position].getImage())
+                        .placeholder(R.drawable.preview)
+                        .error(R.drawable.preview)
+                        .resize(logo_width,logo_height)
+                        .onlyScaleDown()
+                        .into(holder.IV_movie);
+
+
+
+                return true;
+            }
+        });
+
+
+
 
         holder.BT_Book_now.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -265,8 +299,8 @@ public class MovieShowDetailsAdapter
         });
 
         holder.TV_mvcd_movie_timings.setText(movieDetails.getAvailable()[position].getScreen()[0].getTiming());
-        holder.TV_screen1.setTextColor(getResources().getColor(R.color.white));
-        holder.TV_screen1.setBackgroundColor(getResources().getColor(R.color.black));
+//        holder.TV_screen1.setTextColor(getResources().getColor(R.color.white));
+        holder.TV_screen1.setBackgroundResource(R.drawable.box_border);
 
       if(movieDetails.getAvailable()[position].getScreen().length == 4)
       {
@@ -309,17 +343,17 @@ public class MovieShowDetailsAdapter
             public void onClick(View v) {
 
                 holder.TV_mvcd_movie_timings.setText(movieDetails.getAvailable()[position].getScreen()[0].getTiming());
-                holder.TV_screen1.setTextColor(getResources().getColor(R.color.white));
-                holder.TV_screen1.setBackgroundColor(getResources().getColor(R.color.black));
+//                holder.TV_screen1.setTextColor(getResources().getColor(R.color.white));
+                holder.TV_screen1.setBackgroundResource(R.drawable.box_border);
 
-                holder.TV_screen2.setTextColor(getResources().getColor(R.color.movie_time_text));
-                holder.TV_screen2.setBackgroundColor(getResources().getColor(R.color.movie_time_bg));
-
-                holder.TV_screen3.setTextColor(getResources().getColor(R.color.movie_time_text));
-                holder.TV_screen3.setBackgroundColor(getResources().getColor(R.color.movie_time_bg));
-
-                holder.TV_screen4.setTextColor(getResources().getColor(R.color.movie_time_text));
-                holder.TV_screen4.setBackgroundColor(getResources().getColor(R.color.movie_time_bg));
+//                holder.TV_screen2.setTextColor(getResources().getColor(R.color.movie_time_text));
+                holder.TV_screen2.setBackgroundResource(R.drawable.button_border);
+//
+//                holder.TV_screen3.setTextColor(getResources().getColor(R.color.movie_time_text));
+                holder.TV_screen3.setBackgroundResource(R.drawable.button_border);
+//
+//                holder.TV_screen4.setTextColor(getResources().getColor(R.color.movie_time_text));
+                holder.TV_screen4.setBackgroundResource(R.drawable.button_border);
 
 
             }
@@ -330,17 +364,17 @@ public class MovieShowDetailsAdapter
             public void onClick(View v) {
 
                 holder.TV_mvcd_movie_timings.setText(movieDetails.getAvailable()[position].getScreen()[1].getTiming());
-                holder.TV_screen2.setTextColor(getResources().getColor(R.color.white));
-                holder.TV_screen2.setBackgroundColor(getResources().getColor(R.color.black));
+//                holder.TV_screen2.setTextColor(getResources().getColor(R.color.white));
+                holder.TV_screen2.setBackgroundResource(R.drawable.box_border);
 
-                holder.TV_screen1.setTextColor(getResources().getColor(R.color.movie_time_text));
-                holder.TV_screen1.setBackgroundColor(getResources().getColor(R.color.movie_time_bg));
-
-                holder.TV_screen3.setTextColor(getResources().getColor(R.color.movie_time_text));
-                holder.TV_screen3.setBackgroundColor(getResources().getColor(R.color.movie_time_bg));
-
-                holder.TV_screen4.setTextColor(getResources().getColor(R.color.movie_time_text));
-                holder.TV_screen4.setBackgroundColor(getResources().getColor(R.color.movie_time_bg));
+//                holder.TV_screen1.setTextColor(getResources().getColor(R.color.movie_time_text));
+                holder.TV_screen1.setBackgroundResource(R.drawable.button_border);
+//
+//                holder.TV_screen3.setTextColor(getResources().getColor(R.color.movie_time_text));
+                holder.TV_screen3.setBackgroundResource(R.drawable.button_border);
+//
+//                holder.TV_screen4.setTextColor(getResources().getColor(R.color.movie_time_text));
+                holder.TV_screen4.setBackgroundResource(R.drawable.button_border);
 
 
             }
@@ -351,17 +385,17 @@ public class MovieShowDetailsAdapter
             public void onClick(View v) {
 
                 holder.TV_mvcd_movie_timings.setText(movieDetails.getAvailable()[position].getScreen()[2].getTiming());
-                holder.TV_screen3.setTextColor(getResources().getColor(R.color.white));
-                holder.TV_screen3.setBackgroundColor(getResources().getColor(R.color.black));
+//                holder.TV_screen3.setTextColor(getResources().getColor(R.color.white));
+                holder.TV_screen3.setBackgroundResource(R.drawable.box_border);
 
-                holder.TV_screen2.setTextColor(getResources().getColor(R.color.movie_time_text));
-                holder.TV_screen2.setBackgroundColor(getResources().getColor(R.color.movie_time_bg));
-
-                holder.TV_screen1.setTextColor(getResources().getColor(R.color.movie_time_text));
-                holder.TV_screen1.setBackgroundColor(getResources().getColor(R.color.movie_time_bg));
-
-                holder.TV_screen4.setTextColor(getResources().getColor(R.color.movie_time_text));
-                holder.TV_screen4.setBackgroundColor(getResources().getColor(R.color.movie_time_bg));
+//                holder.TV_screen2.setTextColor(getResources().getColor(R.color.movie_time_text));
+                holder.TV_screen2.setBackgroundResource(R.drawable.button_border);
+//
+//                holder.TV_screen1.setTextColor(getResources().getColor(R.color.movie_time_text));
+                holder.TV_screen1.setBackgroundResource(R.drawable.button_border);
+//
+//                holder.TV_screen4.setTextColor(getResources().getColor(R.color.movie_time_text));
+                holder.TV_screen4.setBackgroundResource(R.drawable.button_border);
 
 
             }
@@ -372,17 +406,17 @@ public class MovieShowDetailsAdapter
             public void onClick(View v) {
 
                 holder.TV_mvcd_movie_timings.setText(movieDetails.getAvailable()[position].getScreen()[3].getTiming());
-                holder.TV_screen4.setTextColor(getResources().getColor(R.color.white));
-                holder.TV_screen4.setBackgroundColor(getResources().getColor(R.color.black));
+//                holder.TV_screen4.setTextColor(getResources().getColor(R.color.white));
+                holder.TV_screen4.setBackgroundResource(R.drawable.box_border);
 
-                holder.TV_screen2.setTextColor(getResources().getColor(R.color.movie_time_text));
-                holder.TV_screen2.setBackgroundColor(getResources().getColor(R.color.movie_time_bg));
-
-                holder.TV_screen3.setTextColor(getResources().getColor(R.color.movie_time_text));
-                holder.TV_screen3.setBackgroundColor(getResources().getColor(R.color.movie_time_bg));
-
-                holder.TV_screen1.setTextColor(getResources().getColor(R.color.movie_time_text));
-                holder.TV_screen1.setBackgroundColor(getResources().getColor(R.color.movie_time_bg));
+//                holder.TV_screen2.setTextColor(getResources().getColor(R.color.movie_time_text));
+//                holder.TV_screen2.setBackgroundColor(getResources().getColor(R.color.movie_time_bg));
+//
+//                holder.TV_screen3.setTextColor(getResources().getColor(R.color.movie_time_text));
+//                holder.TV_screen3.setBackgroundColor(getResources().getColor(R.color.movie_time_bg));
+//
+//                holder.TV_screen1.setTextColor(getResources().getColor(R.color.movie_time_text));
+//                holder.TV_screen1.setBackgroundColor(getResources().getColor(R.color.movie_time_bg));
 
 
             }

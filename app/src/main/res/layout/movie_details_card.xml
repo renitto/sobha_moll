@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -15,7 +16,7 @@
         <ImageView
             android:id="@+id/iv_moviedetail"
             android:scaleType="fitXY"
-            android:src="@drawable/movie_img"
+
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </android.support.v7.widget.CardView>
@@ -27,6 +28,7 @@
         android:layout_marginBottom="10dp"
         android:layout_marginRight="5dp"
         android:layout_width="@dimen/movie_detail_card_width"
+        app:cardBackgroundColor="@color/white"
         android:layout_height="match_parent">
 
         <LinearLayout
@@ -70,7 +72,7 @@
                     android:textColor="@color/movie_time_text"
                     android:gravity="center"
                     android:layout_marginRight="5dp"
-                    android:background="@color/movie_time_bg"
+                    android:background="@drawable/button_border"
                     android:text="1"
                     android:layout_weight="1"
                     android:layout_width="0dp"
@@ -81,7 +83,7 @@
                     android:textColor="@color/movie_time_text"
                     android:gravity="center"
                     android:layout_marginRight="5dp"
-                    android:background="@color/movie_time_bg"
+                    android:background="@drawable/button_border"
                     android:text="2"
                     android:layout_weight="1"
                     android:layout_width="0dp"
@@ -92,7 +94,7 @@
                     android:textColor="@color/movie_time_text"
                     android:gravity="center"
                     android:layout_marginRight="5dp"
-                    android:background="@color/movie_time_bg"
+                    android:background="@drawable/button_border"
                     android:text="3"
                     android:layout_weight="1"
                     android:layout_width="0dp"
@@ -103,7 +105,7 @@
                     android:textSize="@dimen/home_subheader_text_size"
                     android:textColor="@color/movie_time_text"
                     android:gravity="center"
-                    android:background="@color/movie_time_bg"
+                    android:background="@drawable/button_border"
                     android:text="4"
                     android:layout_weight="1"
                     android:layout_width="0dp"
@@ -125,31 +127,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp">
 
-                <ScrollView
-                    android:background="@color/shopping_color"
-                    android:layout_weight="1.8"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent">
+
 
                     <TextView
+                        android:background="#282B30"
+                        android:text="READ MORE"
                         android:textColor="@color/white"
                         android:padding="5dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
                         android:textSize="@dimen/home_subheader_text_size"
                         android:id="@+id/tv_mvdc_movie_synopsis"
 
                         />
-                </ScrollView>
+
 
                 <TextView
                     android:textStyle="bold"
                     android:gravity="center"
-                    android:background="@color/black"
+                    android:background="@color/entertainment_color"
                     android:id="@+id/bt_book_now"
-                    android:textSize="@dimen/home_subheader_text_size"
-                    android:textColor="@color/entertainment_color"
-                    android:text="BOOK          NOW"
+                    android:textSize="15sp"
+                    android:textColor="@color/white"
+                    android:text="BOOK                                                              NOW"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="match_parent" />

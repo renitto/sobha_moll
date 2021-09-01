@@ -3,6 +3,7 @@ package com.example.renitto.scmapp.Presenter;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.customtabs.CustomTabsCallback;
 import android.support.customtabs.CustomTabsClient;
@@ -15,6 +16,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +28,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.renitto.scmapp.R;
+import com.example.renitto.scmapp.Utils.CustomTypefaceSpan;
 
 
 public class ActivityHome extends AppCompatActivity  {
@@ -40,6 +44,7 @@ public class ActivityHome extends AppCompatActivity  {
     FrameLayout FL_fragment_container;
     DrawerLayout drawer;
     ActionBar actionBar;
+    NavigationView navigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +71,9 @@ public class ActivityHome extends AppCompatActivity  {
                 LL_menu_shopping.setVisibility(View.GONE);
                 LL_menu_more.setVisibility(View.GONE);
                 // home icon click here
+
+                // setting navigation drawer selected
+                setNavigationDrawerSelected(0);
                 //calling home fragment
                 replaceFragment(new FragmentHome());
 
@@ -103,8 +111,24 @@ public class ActivityHome extends AppCompatActivity  {
 
 
 
-        // calling home fragment here
-        replaceFragment(new FragmentHome());
+
+        if ((getIntent().getExtras())!=null) {
+
+            if ((getIntent().getExtras().getString("offer"))!=null)
+            if (getIntent().getExtras().getString("offer").equals("offer")) {
+                // calling offer fragment here
+                replaceFragment(new FragmentOffers());
+            }
+        }
+
+        else {
+            // calling home fragment here
+            replaceFragment(new FragmentHome());
+        }
+
+
+
+
 
 
 
@@ -135,8 +159,9 @@ public class ActivityHome extends AppCompatActivity  {
 
                 //calling deals fragment
 
-                FragmentOffers fragmentOffers = new FragmentOffers();
-                getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentOffers).addToBackStack("Deals").commit();
+
+
+               replaceFragment(new FragmentOffers());
 
             }
         });
@@ -158,6 +183,7 @@ public class ActivityHome extends AppCompatActivity  {
                 LL_menu_shopping.setVisibility(View.GONE);
 
                 //calling dining fragment
+
 
 
 //                getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentDining).addToBackStack("Dining").commit();
@@ -183,6 +209,8 @@ public class ActivityHome extends AppCompatActivity  {
 
                 //calling entertainment fragment
 
+
+
                 replaceFragment(new FragmentEntertainment());
             }
         });
@@ -202,6 +230,9 @@ public class ActivityHome extends AppCompatActivity  {
 
                 bundle_shopping.putString("fromhome", "Fashion");
                 fragment_shopping.setArguments(bundle_shopping);
+
+
+
                 replaceFragment(fragment_shopping);
 
                 TV_fashion.setOnClickListener(new View.OnClickListener() {
@@ -276,7 +307,9 @@ public class ActivityHome extends AppCompatActivity  {
 
                         //calling about mall fragment
 
+
                         replaceFragment(new FragmentAboutMall());
+
                         LL_menu_more.setVisibility(View.GONE);
                     }
                 });
@@ -284,6 +317,8 @@ public class ActivityHome extends AppCompatActivity  {
                 TV_shoppingplanner.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+
 
                         //calling shopping planner fragment
 
@@ -295,6 +330,8 @@ public class ActivityHome extends AppCompatActivity  {
                 TV_howtoreach.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+
 
                         //calling Howtoreach fragment
 
@@ -317,13 +354,21 @@ public class ActivityHome extends AppCompatActivity  {
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+         navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {
             setupDrawerContent(navigationView);
 
 
 
 
+        }
+
+        Menu m = navigationView.getMenu();
+        for (int i=0;i<m.size();i++) {
+            MenuItem mi = m.getItem(i);
+
+            //the method we have create in activity
+            applyFontToMenuItem(mi);
         }
 
 
@@ -370,19 +415,31 @@ public class ActivityHome extends AppCompatActivity  {
 
     public  void  showCustomChromTabs(String url)
     {
-        //chrome custom tabs here
-        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder(getSession());
-        prepareMenuItems(builder);
-        prepareActionButton(builder);
 
-        builder.setToolbarColor(getResources().getColor(R.color.white)).setShowTitle(false);
-        builder.setStartAnimations(this, R.anim.slide_in_right, R.anim.slide_out_left);
-        builder.setExitAnimations(this, R.anim.slide_in_left, R.anim.slide_out_right);
+        if (url != null && !(url.equals(""))) {
+            //chrome custom tabs here
+            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder(getSession());
+            prepareMenuItems(builder);
+            prepareActionButton(builder);
 
-        builder.setCloseButtonIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_arrow_back_black_24dp));
-        CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(this, Uri.parse(url));
+            builder.setToolbarColor(getResources().getColor(R.color.white)).setShowTitle(false);
+            builder.setStartAnimations(this, R.anim.slide_in_right, R.anim.slide_out_left);
+            builder.setExitAnimations(this, R.anim.slide_in_left, R.anim.slide_out_right);
 
+            builder.setCloseButtonIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_arrow_back_black_24dp));
+            CustomTabsIntent customTabsIntent = builder.build();
+            customTabsIntent.launchUrl(this, Uri.parse(url));
+        }
+
+    }
+
+    // for setting custom font for navigation drawer
+
+    private void applyFontToMenuItem(MenuItem mi) {
+        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/Titillium.otf");
+        SpannableString mNewTitle = new SpannableString(mi.getTitle());
+        mNewTitle.setSpan(new CustomTypefaceSpan("", font), 0, mNewTitle.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        mi.setTitle(mNewTitle);
     }
 
     private void prepareMenuItems(CustomTabsIntent.Builder builder) {
@@ -432,24 +489,24 @@ public class ActivityHome extends AppCompatActivity  {
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        menuItem.setChecked(true);
+
                         drawer.closeDrawers();
 
 
-                        Menu m = navigationView.getMenu();
+//                        Menu m = navigationView.getMenu();
 
-                        for (int i = 0; i < m.size(); i++) {
-                            MenuItem mi = m.getItem(i);
-                            if (!(mi.getItemId() == menuItem.getItemId())) {
-                                mi.setCheckable(false);
-
-                            }
-
-                        }
-
-
-                        menuItem.setCheckable(true);
-                        menuItem.setChecked(true);
+//                        for (int i = 0; i < m.size(); i++) {
+//                            MenuItem mi = m.getItem(i);
+//                            if (!(mi.getItemId() == menuItem.getItemId())) {
+//                                mi.setCheckable(false);
+//
+//                            }
+//
+//                        }
+//
+//
+//                        menuItem.setCheckable(true);
+//                        menuItem.setChecked(true);
                         final ActionBar ab = getSupportActionBar();
 
 
@@ -673,5 +730,22 @@ public class ActivityHome extends AppCompatActivity  {
 
     }
 
+    public  void setNavigationDrawerSelected(int position)
+    {
+
+
+        navigationView.getMenu().getItem(position).setChecked(true);
+        navigationView.getMenu().getItem(position).setCheckable(true);
+
+
+        Menu m = navigationView.getMenu();
+
+        for (int i = 0; i < m.size(); i++) {
+            if(i!=position) {
+                navigationView.getMenu().getItem(i).setCheckable(false);
+//                navigationView.getMenu().getItem(i).setChecked(false);
+            }
+        }
+    }
 
 }

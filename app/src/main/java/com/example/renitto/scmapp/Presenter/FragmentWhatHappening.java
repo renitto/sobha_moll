@@ -42,6 +42,15 @@ public class FragmentWhatHappening extends DialogFragment {
         IV_whathappening_image = (ImageView) view.findViewById(R.id.iv_whathappening_image);
         BT_whathappening_close = (Button) view.findViewById(R.id.bt_whathappening_close);
 
+        getActivity().findViewById(R.id.ll_menu_shopping).setVisibility(View.GONE);
+        getActivity().findViewById(R.id.ll_menu_more).setVisibility(View.GONE);
+
+        getActivity().findViewById(R.id.rl_menu_shopping).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+        getActivity().findViewById(R.id.rl_menu_dining).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+        getActivity().findViewById(R.id.rl_menu_entertainment).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+        getActivity().findViewById(R.id.rl_menu_deals).setBackgroundColor(getResources().getColor(R.color.black)); // changing other to black
+        getActivity().findViewById(R.id.rl_menu_more).setBackgroundColor(getResources().getColor(R.color.more_color)); // changing other to black
+
         //setting menu card image here
         Picasso.with(getActivity())
                 .load("http://www.sensationslife.in/sites/default/files/sobha-city-mall-1.jpg")

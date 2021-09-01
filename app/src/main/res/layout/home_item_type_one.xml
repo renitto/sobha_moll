@@ -13,6 +13,7 @@
             android:layout_height="match_parent">
 
             <TextView
+                android:textStyle="bold"
                 android:textSize="@dimen/home_card_tex_size"
                 android:id="@+id/tv_home_category_name"
                 android:textColor="#FFFFFF"
@@ -23,8 +24,8 @@
             <TextView
                 android:layout_centerVertical="true"
                 android:id="@+id/tv_dummy"
-                android:layout_width="10dp"
-                android:layout_height="10dp" />
+                android:layout_width="0dp"
+                android:layout_height="0dp" />
 
 
             <ImageView
@@ -47,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
             <View
-                android:alpha="0.3"
+                android:alpha="0"
                 android:background="#000"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
@@ -61,7 +62,7 @@
                 android:id="@+id/v_dummy"
                 android:layout_centerVertical="true"
                 android:layout_width="0dp"
-                android:layout_height="2dp"/>
+                android:layout_height="0dp"/>
 
             </RelativeLayout>
 

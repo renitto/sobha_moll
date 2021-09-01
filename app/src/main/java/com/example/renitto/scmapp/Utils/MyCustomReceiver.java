@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -70,7 +69,7 @@ public class MyCustomReceiver extends ParsePushBroadcastReceiver {
         Bitmap bmp = null;
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setSmallIcon(R.drawable.push)
                         .setContentTitle(STR_Header)
                         .setContentText(STR_Description);
                       /*  .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
@@ -78,8 +77,8 @@ public class MyCustomReceiver extends ParsePushBroadcastReceiver {
 */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
-            mBuilder.setSmallIcon(R.mipmap.ic_launcher);
-            mBuilder.setColor(Color.RED);
+            mBuilder.setSmallIcon(R.drawable.push);
+//            mBuilder.setColor(Color.RED);
           /*  mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
                     R.drawable.myntra));*/
 
@@ -106,6 +105,7 @@ public class MyCustomReceiver extends ParsePushBroadcastReceiver {
         bigPicStyle.setSummaryText(STR_Description);
         mBuilder.setStyle(bigPicStyle);
         Intent resultIntent = new Intent(context, ActivityHome.class);
+        resultIntent.putExtra("offer", "offer");
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         // Adds the back stack for the Intent (but not the Intent itself)

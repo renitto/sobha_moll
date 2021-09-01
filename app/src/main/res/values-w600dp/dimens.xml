@@ -41,7 +41,7 @@
     <dimen name="shp_plnr_header_text_margin">140dp</dimen>
 
     // details
-    <dimen name="detail_header_logo_height">100dp</dimen>
+    <dimen name="detail_header_logo_height">110dp</dimen>
 
     //upcoming movies
     <dimen name="upcoming_movie_card_width">180dp</dimen>

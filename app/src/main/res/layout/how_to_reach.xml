@@ -88,15 +88,16 @@
 
 
             <ImageView
-                android:visibility="gone"
-                android:background="@drawable/arrowright"
+                android:background="@drawable/route_map"
                 android:layout_width="match_parent"
-                android:layout_height="100dp" />
+                android:layout_height="150dp" />
 
             <TextView
+
                 android:textSize="@dimen/hwtoreach_text_size"
-                android:gravity="center"
-                android:padding="5dp"
+                android:paddingLeft="50dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:text="info"
                 android:background="@color/light_yellow"
                 android:layout_width="match_parent"
@@ -105,7 +106,7 @@
             <TextView
                 android:textSize="@dimen/hwtoreach_text_size"
                 android:drawablePadding="10dp"
-                android:drawableLeft="@drawable/ic_home"
+                android:drawableLeft="@drawable/ic_home_black_18dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="30dp"
             android:layout_marginLeft="20dp"
@@ -117,7 +118,7 @@
             <TextView
                 android:textSize="@dimen/hwtoreach_text_size"
                 android:drawablePadding="10dp"
-                android:drawableLeft="@drawable/ic_clock"
+                android:drawableLeft="@drawable/ic_access_time_black_18dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginBottom="5dp"
@@ -131,7 +132,7 @@
                 android:clickable="true"
                 android:textSize="@dimen/hwtoreach_text_size"
                 android:drawablePadding="10dp"
-                android:drawableLeft="@drawable/ic_mobile"
+                android:drawableLeft="@drawable/ic_stay_primary_portrait_black_18dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginBottom="5dp"
@@ -143,7 +144,7 @@
                 android:clickable="true"
                 android:textSize="@dimen/hwtoreach_text_size"
                 android:drawablePadding="10dp"
-                android:drawableLeft="@drawable/ic_email"
+                android:drawableLeft="@drawable/ic_mail_outline_black_18dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginBottom="5dp"
@@ -155,7 +156,7 @@
                 android:clickable="true"
                 android:textSize="@dimen/hwtoreach_text_size"
                 android:drawablePadding="10dp"
-                android:drawableLeft="@drawable/ic_web"
+                android:drawableLeft="@drawable/ic_link_black_18dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginBottom="30dp"

@@ -18,6 +18,7 @@ import com.example.renitto.scmapp.Model.ModelEntertainmentBrand;
 import com.example.renitto.scmapp.Model.ModelFashion;
 import com.example.renitto.scmapp.Model.ModelGeneralQuery;
 import com.example.renitto.scmapp.Model.ModelHomeContent;
+import com.example.renitto.scmapp.Model.ModelHomeEvent;
 import com.example.renitto.scmapp.Model.ModelMovieDetails;
 import com.example.renitto.scmapp.Model.ModelOffer;
 import com.example.renitto.scmapp.Model.ModelSubCategories;
@@ -58,6 +59,9 @@ public class NetworkManager {
     public static final int GET_OFFER_DETAIL_CONTENTS = 7 ;
     public static final int GET_SUBCATEGORY_CONTENTS = 8 ;
     public static final int GET_GENERALQUERY_CONTENTS = 9 ;
+    public static final int GET_HOME_EVENTS =10 ;
+
+    public static final int SAVE_EMAIL =11 ;
 
 
     //  Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new NetDateTimeAdapter()).create();
@@ -93,14 +97,12 @@ public class NetworkManager {
             request = new JsonObjectRequest(Request.Method.POST, getUrl(whatToSend,null), new JSONObject(gson.toJson(params)), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-//                    switch (whatToSend) {
-//                        case SAVE_RESERVATION:
-//                        listener.showData(gson.fromJson(response.toString(), ModelSuccess.class), SAVE_RESERVATION);
-//                            break;
-//                        case SAVE_USER:
-//                            listener.showData(gson.fromJson(response.toString(), ModelSuccess.class), SAVE_USER);
-//                            break;
-//                    }
+                    switch (whatToSend) {
+                        case SAVE_EMAIL:
+                        listener.showData(gson.fromJson(response.toString(), String.class), SAVE_EMAIL);
+                            break;
+
+                    }
 
                 }
 
@@ -130,15 +132,19 @@ public class NetworkManager {
 
       Application.getInstance().addToRequestQueue(request);
     }
-    public static void GetDataFromServer(final onServerDataRequestListener listener, final int whatToFetch, Context context, String[] params) {
 
-if(new ConnectionDetector(context).isConnectingToInternet()) {
+
+    public static void GetDataFromServer(final onServerDataRequestListener listener, final int whatToFetch, final Context context, String[] params) {
+
+//if(new ConnectionDetector(context).isConnectingToInternet()) {
 
     final ProgressDialog pDialog = new ProgressDialog(context);
-    pDialog.setMessage("Loading...");
-    pDialog.show();
-    pDialog.setCanceledOnTouchOutside(false);
-    pDialog.setCancelable(false);
+        if(whatToFetch!=GET_BRAND_DETAIL_CONTENTS) {
+            pDialog.setMessage("Loading...");
+            pDialog.show();
+            pDialog.setCanceledOnTouchOutside(false);
+            pDialog.setCancelable(false);
+        }
 
 
     final Gson gson = new GsonHelper().getGson();
@@ -155,60 +161,72 @@ if(new ConnectionDetector(context).isConnectingToInternet()) {
                     switch (whatToFetch) {
 
                         case GET_HOME_CONTENTS:
-
-                            ((FragmentHome) listener).setSliders(gson.fromJson(response, ModelHomeContent.class));
+                           ModelHomeContent myHomeContent=gson.fromJson(response, ModelHomeContent.class);
+                            if (myHomeContent != null) {
+                                new DbManager().insertToHomeContent(context, myHomeContent);
+                                ((FragmentHome) listener).setSliders(myHomeContent);
+                            }
                             //   listener.showData(gson.fromJson(response, ModelHomeContent.class), GET_HOME_CONTENTS);
                             break;
 
                         case GET_ENTERTAINMENT_BRAND_CONTENTS:
 
-//                                ((FragmentHome)listener).setSliders(gson.fromJson(response, ModelHomeContent.class));
+
                             listener.showData(gson.fromJson(response, ModelEntertainmentBrand.class), GET_ENTERTAINMENT_BRAND_CONTENTS);
                             break;
 
                         case GET_SHOPPING_FASHION_CONTENTS:
 
-//                                ((FragmentHome)listener).setSliders(gson.fromJson(response, ModelHomeContent.class));
+
                             listener.showData(gson.fromJson(response, ModelFashion.class), GET_SHOPPING_FASHION_CONTENTS);
                             break;
 
                         case GET_BRAND_CONTENTS:
 
-//                                ((FragmentHome)listener).setSliders(gson.fromJson(response, ModelHomeContent.class));
+
                             listener.showData(gson.fromJson(response, ModelBrands.class), GET_BRAND_CONTENTS);
                             break;
 
                         case GET_BRAND_DETAIL_CONTENTS:
 
-//                                ((FragmentHome)listener).setSliders(gson.fromJson(response, ModelHomeContent.class));
+
                             listener.showData(gson.fromJson(response, ModelBrandDetails.class), GET_BRAND_DETAIL_CONTENTS);
                             break;
                         case GET_MOVIE_DETAIL_CONTENTS:
 
-//                                ((FragmentHome)listener).setSliders(gson.fromJson(response, ModelHomeContent.class));
+
                             listener.showData(gson.fromJson(response, ModelMovieDetails.class), GET_MOVIE_DETAIL_CONTENTS);
                             break;
 
                         case GET_OFFER_DETAIL_CONTENTS:
 
-//                                ((FragmentHome)listener).setSliders(gson.fromJson(response, ModelHomeContent.class));
+
                             listener.showData(gson.fromJson(response, ModelOffer.class), GET_OFFER_DETAIL_CONTENTS);
 
                             break;
 
                         case GET_SUBCATEGORY_CONTENTS:
 
-//                                ((FragmentHome)listener).setSliders(gson.fromJson(response, ModelHomeContent.class));
+
+
                             listener.showData(gson.fromJson(response, ModelSubCategories.class), GET_SUBCATEGORY_CONTENTS);
 
                             break;
 
                         case GET_GENERALQUERY_CONTENTS:
 
-//                                ((FragmentHome)listener).setSliders(gson.fromJson(response, ModelHomeContent.class));
+
                             listener.showData(gson.fromJson(response, ModelGeneralQuery.class), GET_GENERALQUERY_CONTENTS);
 
                             break;
+
+                        case GET_HOME_EVENTS:
+
+
+                            listener.showData(gson.fromJson(response, ModelHomeEvent.class), GET_HOME_EVENTS);
+
+                            break;
+
 
 
                     }
@@ -232,9 +250,9 @@ if(new ConnectionDetector(context).isConnectingToInternet()) {
     stringRequest.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 2, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     Application.getInstance().addToRequestQueue(stringRequest);
 
-   }
-    else
-    Toast.makeText(context,"Please check your internet connection and try again !",Toast.LENGTH_LONG).show();
+
+//    else
+//    Toast.makeText(context,"Please check your internet connection and try again !",Toast.LENGTH_LONG).show();
 
     }
 
@@ -247,7 +265,8 @@ if(new ConnectionDetector(context).isConnectingToInternet()) {
 
        // String base_url="http://pepperapp.singnetsolutions.com.sg/service1.svc/";
 
-        String base_url = "http://sobhacitymall.sweans.org/api/";
+//        String base_url = "http://sobhacitymall.sweans.org/api/";
+        String base_url = "http://www.sobhacitymall.com/api/";
         String hash_key = "fv3wqt7g1lpu4verta2q";
 
         String userid;
@@ -292,6 +311,14 @@ if(new ConnectionDetector(context).isConnectingToInternet()) {
             case GET_GENERALQUERY_CONTENTS:
 
                 return base_url + "general-queries.php?action=get-page-details&page-id=about&hash=" + hash_key;
+
+            case GET_HOME_EVENTS:
+                String home_event_id = params[0];
+                return base_url + "general-queries.php?action=get-page-details&page-id="+ home_event_id +"&hash=" + hash_key;
+
+            case SAVE_EMAIL:
+//                String home_event_id = params[0];
+                return base_url ;
 
             default:
                 return null;

@@ -51,6 +51,10 @@ public class FragmentShoppingPlanner extends Fragment {
                 container, false);
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        // setting navigation drawer
+
+        ((ActivityHome)getActivity()).setNavigationDrawerSelected(7);
+
         dbManager = new DbManager();
 
 

@@ -98,7 +98,7 @@
         android:background="@color/white"
         android:id="@+id/recycler_upcoming_movies"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/home_slider_height"
+        android:layout_height="@dimen/upcomingmovies_height"
         android:layout_marginBottom="5dp"
         />
 
@@ -109,14 +109,14 @@
         android:layout_marginTop="5dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="30dp">
 
         <TextView
             android:id="@+id/tv_entertainment_open_hours"
             android:layout_weight="1"
             android:textSize="@dimen/hwtoreach_text_size"
             android:drawablePadding="10dp"
-            android:drawableLeft="@drawable/ic_clock"
+            android:drawableLeft="@drawable/ic_access_time_black_18dp"
             android:layout_marginLeft="15dp"
             android:text="Open 10.00 AM   -  9.00 PM "
             android:layout_width="0dp"
@@ -127,7 +127,7 @@
             android:layout_weight="1"
             android:textSize="@dimen/hwtoreach_text_size"
             android:drawablePadding="10dp"
-            android:drawableLeft="@drawable/ic_mobile"
+            android:drawableLeft="@drawable/ic_stay_primary_portrait_black_18dp"
             android:layout_marginLeft="15dp"
             android:text="0487 - 2379000"
             android:layout_width="0dp"
@@ -139,14 +139,14 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="30dp">
 
         <TextView
             android:id="@+id/tv_entertainment_emailid"
             android:layout_weight="1"
             android:textSize="@dimen/hwtoreach_text_size"
             android:drawablePadding="10dp"
-            android:drawableLeft="@drawable/ic_email"
+            android:drawableLeft="@drawable/ic_mail_outline_black_18dp"
             android:layout_marginLeft="15dp"
             android:text="info@sobhacitymall.com"
             android:layout_width="0dp"
@@ -156,7 +156,7 @@
             android:layout_weight="1"
             android:textSize="@dimen/hwtoreach_text_size"
             android:drawablePadding="10dp"
-            android:drawableLeft="@drawable/ic_web"
+            android:drawableLeft="@drawable/ic_link_black_18dp"
             android:layout_marginLeft="15dp"
             android:text="www.sobhacitymall.com"
             android:layout_width="0dp"

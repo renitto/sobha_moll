@@ -1,6 +1,7 @@
 package com.example.renitto.scmapp.Presenter;
 
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
@@ -12,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -20,7 +22,10 @@ import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.example.renitto.scmapp.Application;
+import com.example.renitto.scmapp.DAL.DbManager;
 import com.example.renitto.scmapp.DAL.NetworkManager;
+import com.example.renitto.scmapp.Model.ModelBrandDetails;
 import com.example.renitto.scmapp.Model.ModelBrands;
 import com.example.renitto.scmapp.Model.ModelFashion;
 import com.example.renitto.scmapp.R;
@@ -42,16 +47,19 @@ public class FragmentFashion extends Fragment implements BaseSliderView.OnSlider
     RecyclerView RV_Shopping;
     RecyclerView.LayoutManager mLayoutManager;
     SliderLayout mShoppingSlider;
-    ModelFashion modelFashion;
+    String[] banner_slider;
     HashMap<String,String> url_maps;
     ShoppingItemAdapter shoppingItemAdapter;
-    ModelBrands brands;
+    ModelBrands.Brands[] brands;
     private String[] params = new String[1];
     Bundle bundle_fashion= new Bundle();
     FragmentDetail fragmentDetail = new FragmentDetail();
 
     ConnectionDetector cd;
     Boolean isInternetPresent = false;
+    DbManager dbManager ;
+    int rand;
+    Activity myActivity;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -91,12 +99,23 @@ public class FragmentFashion extends Fragment implements BaseSliderView.OnSlider
 
 
 
-        setSliderData();
-        setBrandData();
 
 
+        if (banner_slider== null )
+
+            banner_slider = dbManager.getSubBannerSlider(getActivity(),getArguments().getString("shopp_id"));
+
+        if(brands == null )
+        {
+            brands = dbManager.getBrands(getActivity(),getArguments().getString("shopp_id")) ;
+        }
+        if(banner_slider != null)
+            setSliderData();
+
+        if( brands != null)
 
 
+            setBrandData();
 
 
 
@@ -113,30 +132,38 @@ public class FragmentFashion extends Fragment implements BaseSliderView.OnSlider
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        myActivity=getActivity();
+        dbManager = new DbManager();
         params[0] = getArguments().getString("shopp_id");
 
-//        if (isInternetPresent)
-//
-//        {
-        NetworkManager.GetDataFromServer(this, NetworkManager.GET_SHOPPING_FASHION_CONTENTS, getActivity(), params);
-        NetworkManager.GetDataFromServer(this, NetworkManager.GET_BRAND_CONTENTS, getActivity(), params);
-//        }
-//
-//        else
-//            Toast.makeText(getActivity(),"Please check your internet connection and try again !",Toast.LENGTH_LONG).show();
+        if(new ConnectionDetector(getActivity()).isConnectingToInternet()) {
+            NetworkManager.GetDataFromServer(this, NetworkManager.GET_SHOPPING_FASHION_CONTENTS, getActivity(), params);
+            NetworkManager.GetDataFromServer(this, NetworkManager.GET_BRAND_CONTENTS, getActivity(), params);
+        }
+        else {
+            banner_slider = dbManager.getSubBannerSlider(getActivity(),getArguments().getString("shopp_id"));
+            brands = dbManager.getBrands(getActivity(),getArguments().getString("shopp_id"));
+            if(banner_slider == null && brands == null)
+            {
+                Toast.makeText(getActivity(),"Please check your internet connection and try again !",Toast.LENGTH_SHORT).show();
+            }
+
+
+        }
+
+
+
     }
 
     public  void  setSliderData()
     {
 
-        if(modelFashion!=null) {
-            if (modelFashion.banner_slider != null) {
+            if (banner_slider != null && banner_slider.length >0) {
                 mShoppingSlider.setVisibility(View.VISIBLE);
-                setSliders(modelFashion);
-            } else
-                mShoppingSlider.setVisibility(View.GONE);
-        }
+                setSliders(banner_slider);
+            }
+
+
 
     }
 
@@ -186,8 +213,9 @@ public class FragmentFashion extends Fragment implements BaseSliderView.OnSlider
 
         if (whatToShow == NetworkManager.GET_SHOPPING_FASHION_CONTENTS ) {
             if (data != null) {
-                modelFashion = (ModelFashion) data;
-
+                String id=getArguments().getString("shopp_id");
+                banner_slider = ((ModelFashion) data).banner_slider;
+                dbManager.insertSubBannerSlider(getActivity(),banner_slider,id);
                 setSliderData();
 
             }
@@ -196,10 +224,23 @@ public class FragmentFashion extends Fragment implements BaseSliderView.OnSlider
         {
             if (data != null) {
 
-                brands = (ModelBrands)data;
+                brands = ((ModelBrands)data).brands;
+                //insert brands to sqlite
+                dbManager.insertBrands(getActivity(),brands,getArguments().getString("shopp_id"));
 
+                for(int i=0;i<brands.length;i++){
+                    NetworkManager.GetDataFromServer(this,NetworkManager.GET_BRAND_DETAIL_CONTENTS,getActivity(),new String[]{brands[i].brand_id});
+                }
                 setBrandData();
             }
+        }
+        else if(whatToShow == NetworkManager.GET_BRAND_DETAIL_CONTENTS ) {
+            ModelBrandDetails details=(ModelBrandDetails)data;
+            dbManager.insertBrandDetails(myActivity,details);
+            dbManager.insertDetailBannerSlider(myActivity,details.banner_slider,details.getId());
+            dbManager.insertDetailOfferSlider(myActivity,details.offer_slider,details.getId());
+            //insert detail to sqlite
+
         }
     }
 
@@ -213,7 +254,7 @@ public class FragmentFashion extends Fragment implements BaseSliderView.OnSlider
             extends RecyclerView.Adapter<ShoppingItemAdapter.ViewHolder> {
 
 
-        ModelBrands brands;
+        ModelBrands.Brands[] brands;
 
 
 
@@ -248,7 +289,7 @@ public class FragmentFashion extends Fragment implements BaseSliderView.OnSlider
         }
 
 
-        public ShoppingItemAdapter(Context context, ModelBrands brands) {
+        public ShoppingItemAdapter(Context context, ModelBrands.Brands[] brands) {
 
             this.brands = brands;
 
@@ -287,7 +328,7 @@ public class FragmentFashion extends Fragment implements BaseSliderView.OnSlider
 
 
 
-            int rand=  R.color.dining_color;
+             rand=  R.color.dining_color;
 
             Random randomGenerator = new Random();
 
@@ -318,15 +359,27 @@ public class FragmentFashion extends Fragment implements BaseSliderView.OnSlider
 
 
 
+            ViewTreeObserver vto = holder.IV_shopping_item_image.getViewTreeObserver();
+            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                public boolean onPreDraw() {
+                    holder.IV_shopping_item_image.getViewTreeObserver().removeOnPreDrawListener(this);
+                 int   logo_height = holder.IV_shopping_item_image.getMeasuredHeight();
+                 int   logo_width = holder.IV_shopping_item_image.getMeasuredWidth();
+                    Picasso.with(getActivity())
+                            .load(brands[position].getImage())
+                            .resize(logo_width,logo_height)
+                            .onlyScaleDown()
+                            .placeholder(rand)
+                            .error(rand)
+                            .into(holder.IV_shopping_item_image);
 
 
-            Picasso.with(getActivity())
-                    .load(brands.getBrands()[position].getImage())
-                    .resize(getView().getWidth(),getView().getHeight())
-                    .onlyScaleDown()
-                    .placeholder(rand)
-                    .error(rand)
-                    .into(holder.IV_shopping_item_image);
+                    return true;
+                }
+            });
+
+
+
 
 
 
@@ -340,7 +393,7 @@ public class FragmentFashion extends Fragment implements BaseSliderView.OnSlider
 
 
 
-                    bundle_fashion.putString("brandid", brands.getBrands()[position].getBrand_id());
+                    bundle_fashion.putString("brandid", brands[position].getBrand_id());
                     fragmentDetail.setArguments(bundle_fashion);
 
                     // calling detail fragment here
@@ -360,7 +413,7 @@ public class FragmentFashion extends Fragment implements BaseSliderView.OnSlider
 
         @Override
         public int getItemCount() {
-            return brands.getBrands().length;
+            return brands.length;
         }
 
 
@@ -371,9 +424,9 @@ public class FragmentFashion extends Fragment implements BaseSliderView.OnSlider
     }
 
 
-    public void  setSliders(ModelFashion fashion){
-        for(int i=0;i<fashion.banner_slider.length;i++){
-            url_maps.put("fashion"+i,fashion.banner_slider[i]);
+    public void  setSliders(String[] banner_slider){
+        for(int i=0;i<banner_slider.length;i++){
+            url_maps.put("fashion"+i,banner_slider[i]);
         }
 
         for(String name : url_maps.keySet()){

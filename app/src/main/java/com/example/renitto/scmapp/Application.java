@@ -3,8 +3,17 @@ package com.example.renitto.scmapp;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.example.renitto.scmapp.Model.ModelBrands;
+import com.example.renitto.scmapp.Model.ModelEntertainmentBrand;
+import com.example.renitto.scmapp.Model.ModelFashion;
+import com.example.renitto.scmapp.Model.ModelGeneralQuery;
+import com.example.renitto.scmapp.Model.ModelHomeContent;
+import com.example.renitto.scmapp.Model.ModelMovieDetails;
+import com.example.renitto.scmapp.Model.ModelOffer;
+import com.example.renitto.scmapp.Model.ModelSubCategories;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
+import com.splunk.mint.Mint;
 
 /**
  * Created by Renitto on 3/1/2016.
@@ -16,6 +25,24 @@ public class Application extends android.app.Application {
             .getSimpleName();
     private static Application mInstance;
     private RequestQueue mRequestQueue;
+    public ModelFashion modelFashion;
+    public ModelBrands brands;
+
+    public ModelFashion dining_modelFashion;
+    public ModelBrands dining_brands;
+
+    public ModelOffer offer;
+
+    public ModelFashion fashion;
+    public ModelSubCategories subCategories;
+
+    public ModelFashion dining_fashion;
+    public ModelSubCategories dining_subCategories;
+
+    public  ModelHomeContent myHomeContent;
+    public ModelEntertainmentBrand entertainmentBrand;
+    public ModelMovieDetails movieDetails ;
+    public ModelGeneralQuery generalQuery;
 
 
     @Override
@@ -23,6 +50,9 @@ public class Application extends android.app.Application {
         super.onCreate();
         mInstance=this;
 
+        // splunkmint for logs
+        Mint.enableDebugLog();
+        Mint.initAndStartSession(this, "db74393c");
 
 
         // parse settings here
@@ -45,6 +75,7 @@ public class Application extends android.app.Application {
 
     public <T> void addToRequestQueue(Request<T> req) {
         req.setTag(TAG);
+//        req.setShouldCache(false); // not adding to cache
         getRequestQueue().add(req);
     }
 

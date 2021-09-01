@@ -23,6 +23,7 @@
 
 
     <com.daimajia.slider.library.SliderLayout
+        android:visibility="gone"
         android:id="@+id/shoppping_slider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/home_slider_height"

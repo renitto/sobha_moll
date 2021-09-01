@@ -7,41 +7,43 @@
 
         <item
             android:id="@+id/nav_home"
-
+            android:icon="@drawable/home"
             android:title="Home" />
 
         <item
             android:id="@+id/nav_shopping"
-
+            android:icon="@drawable/shopping"
             android:title="Shopping" />
 
         <item
             android:id="@+id/nav_dining"
-
+            android:icon="@drawable/dining"
             android:title="Dining" />
         <item
+            android:icon="@drawable/entertainment"
             android:id="@+id/nav_entertainment"
             android:title="Entertainment" />
         <item
+            android:icon="@drawable/offers"
             android:id="@+id/nav_deals"
             android:title="Offers" />
 
+        <item
+            android:icon="@drawable/about_mall"
+            android:id="@+id/nav_aboutmall"
+            android:title="About Mall" />
+        <item
+            android:icon="@drawable/howtoreach"
+            android:id="@+id/nav_howtoreach"
+            android:title="How To Reach ?" />
+        <item
+            android:icon="@drawable/shopping_planner"
+            android:id="@+id/nav_shoppingplanner"
+            android:title="Shopping Planner" />
+
     </group>
 
-    <item android:title="More">
-        <menu>
-            <item
-                android:id="@+id/nav_aboutmall"
-                android:title="About Mall" />
-            <item
-                android:id="@+id/nav_howtoreach"
-                android:title="How To Reach ?" />
-            <item
-                android:id="@+id/nav_shoppingplanner"
-                android:title="Shopping Planner" />
 
-        </menu>
-    </item>
 
 
 </menu>

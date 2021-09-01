@@ -7,7 +7,7 @@
     // home
     <dimen name="home_colourband_height">5dp</dimen>
     <dimen name="home_headertab_height">35dp</dimen>
-    <dimen name="home_headertab_text_size">11sp</dimen>
+    <dimen name="home_headertab_text_size">10sp</dimen>
     <dimen name="home_subheader_text_size">9sp</dimen>
 
     <dimen name="tabheader_text_size">12sp</dimen>
@@ -17,11 +17,13 @@
     <dimen name="home_title_height">30dp</dimen>
     <dimen name="home_title_text_size">12sp</dimen>
     <dimen name="home_slider_height">180dp</dimen>
+    <dimen name="upcomingmovies_height">220dp</dimen>
+
 
     <dimen name="home_category_card_height">120dp</dimen>
     <dimen name="home_arrow_height">10dp</dimen>
     <dimen name="home_arrow_width">30dp</dimen>
-    <dimen name="home_card_tex_size">12sp</dimen>
+    <dimen name="home_card_tex_size">15sp</dimen>
 
     // how to reach
     <dimen name="hwtoreach_text_size">11sp</dimen>
@@ -51,7 +53,7 @@
     <dimen name="shp_plnr_cncl_button_text_size">10sp</dimen>
 
     // details
-    <dimen name="detail_header_logo_height">70dp</dimen>
+    <dimen name="detail_header_logo_height">80dp</dimen>
 
     //upcoming movies
     <dimen name="upcoming_movie_card_width">120dp</dimen>
