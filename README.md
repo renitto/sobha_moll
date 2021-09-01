@@ -1,18 +1,18 @@
-# Sobha City Mall - unofficial
+# Sobha City Mall - Unofficial App
 A showcasing app for famous shopping mall in india.you can find latest offers , brands , movie details etc through this app.
 
 Home Screen
 
-![alt text](https://github.com/renitto/ktu_aspirant/blob/master/screenshots/ktu_home.jpg)
+![alt text](https://github.com/renitto/sobha_moll/blob/master/screenshots/home_framed.png)
 
-Profile Screen
+How to reach Screen
 
-![alt text](https://github.com/renitto/ktu_aspirant/blob/master/screenshots/ktu_profile.jpg)
+![alt text](https://github.com/renitto/sobha_moll/blob/master/screenshots/howtoreach_framed.png)
 
-Notification Screen
+Offers Screen
 
-![alt text](https://github.com/renitto/ktu_aspirant/blob/master/screenshots/ktu_notification.jpg)
+![alt text](https://github.com/renitto/sobha_moll/blob/master/screenshots/offers_framed.png)
 
-Facebook Feed Screen
+Entertainment/Movies Now Screen
 
-![alt text](https://github.com/renitto/ktu_aspirant/blob/master/screenshots/ktu_fb.jpg)
+![alt text](https://github.com/renitto/sobha_moll/blob/master/screenshots/entertainment1_framed.png)
